@@ -8,510 +8,307 @@
   <style>
     :root {
       color-scheme: light;
-      --bg: #f5f7f2;
-      --surface: #ffffff;
-      --surface-alt: #edf2eb;
-      --text: #1d2b26;
-      --muted: #687770;
-      --line: #e0e7df;
-      --brand: #176b53;
-      --brand-strong: #10563f;
-      --brand-soft: #e3f3eb;
-      --accent: #e5a441;
-      --accent-soft: #fff3d9;
-      --danger: #bd554c;
-      --danger-soft: #fff0ed;
-      --shadow: 0 16px 40px rgba(32, 54, 44, .08);
-      --radius: 22px;
+      --bg:#f5f7f2; --surface:#fff; --alt:#edf2eb; --text:#1d2b26; --muted:#687770;
+      --line:#e0e7df; --brand:#176b53; --strong:#10563f; --soft:#e3f3eb;
+      --accent:#e5a441; --accent-soft:#fff3d9; --danger:#bd554c; --danger-soft:#fff0ed;
+      --shadow:0 14px 36px rgba(32,54,44,.08); --radius:21px;
     }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        color-scheme: dark;
-        --bg: #111a17;
-        --surface: #1a2621;
-        --surface-alt: #22312b;
-        --text: #edf4ef;
-        --muted: #a5b5ab;
-        --line: #33443b;
-        --brand: #73c9a5;
-        --brand-strong: #91dfbb;
-        --brand-soft: #20392e;
-        --accent: #e7b65e;
-        --accent-soft: #3b3020;
-        --danger: #f09287;
-        --danger-soft: #3d2624;
-        --shadow: 0 16px 40px rgba(0, 0, 0, .25);
-      }
+    @media(prefers-color-scheme:dark){
+      :root{color-scheme:dark;--bg:#111a17;--surface:#1a2621;--alt:#22312b;--text:#edf4ef;--muted:#a5b5ab;
+        --line:#33443b;--brand:#73c9a5;--strong:#91dfbb;--soft:#20392e;--accent:#e7b65e;
+        --accent-soft:#3b3020;--danger:#f09287;--danger-soft:#3d2624;--shadow:0 14px 36px rgba(0,0,0,.25)}
     }
-
-    * { box-sizing: border-box; }
-    html { min-height: 100%; scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background:
-        radial-gradient(ellipse at 20% 0%, var(--brand-soft), transparent 34rem),
-        var(--bg);
-      color: var(--text);
-      font: 16px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    a { color: inherit; text-decoration: none; }
-    .screens { min-height: 100vh; padding: 20px 16px 40px; }
-    .screen { display: none; width: min(100%, 520px); margin: 0 auto; }
-    .screen:target { display: block; }
-    .screens:not(:has(.screen:target)) #welcome { display: block; }
-
-    .app-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 2px 0 25px;
-    }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.03em; }
-    .brand-mark {
-      display: grid; place-items: center; width: 38px; height: 38px;
-      border-radius: 13px; color: white; background: var(--brand);
-      font-size: 20px; font-weight: 800;
-    }
-    .brand-name { font-size: 17px; }
-    .brand-name small { display: block; color: var(--muted); font-size: 10px; font-weight: 600; letter-spacing: .06em; }
-    .avatar {
-      display: grid; place-items: center; width: 38px; height: 38px;
-      border-radius: 50%; background: var(--accent-soft); color: var(--text); font-weight: 800;
-    }
-
-    .eyebrow { margin: 0 0 8px; color: var(--brand); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 { margin-bottom: 10px; font-size: clamp(30px, 8vw, 42px); line-height: 1.08; letter-spacing: -.045em; }
-    h2 { margin-bottom: 8px; font-size: 24px; line-height: 1.18; letter-spacing: -.03em; }
-    h3 { margin-bottom: 6px; font-size: 16px; }
-    p { color: var(--muted); }
-    .lead { margin-bottom: 23px; font-size: 16px; }
-    .card {
-      padding: 20px; margin: 14px 0; background: var(--surface);
-      border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
-    }
-    .card.compact { padding: 16px; }
-    .hero {
-      padding: 26px 22px; margin: 0 0 16px; overflow: hidden;
-      border-radius: 28px; background: var(--brand); color: #fff;
-      box-shadow: var(--shadow);
-    }
-    .hero p { color: rgba(255,255,255,.82); }
-    .hero .eyebrow { color: #c3f2da; }
-    .hero h2 { font-size: 28px; }
-    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .stack { display: grid; gap: 12px; }
-    .muted { color: var(--muted); }
-    .small { font-size: 13px; }
-    .tiny { font-size: 11px; }
-    .badge {
-      display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
-      border-radius: 999px; background: var(--brand-soft); color: var(--brand);
-      font-size: 12px; font-weight: 750;
-    }
-    .badge.amber { background: var(--accent-soft); color: var(--text); }
-    .badge.red { background: var(--danger-soft); color: var(--danger); }
-    .button {
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      min-height: 52px; padding: 13px 18px; border: 0; border-radius: 16px;
-      background: var(--brand); color: #fff; font-weight: 800; text-align: center;
-      transition: transform .15s ease, background .15s ease;
-    }
-    .button:hover { transform: translateY(-1px); background: var(--brand-strong); }
-    .button.secondary { background: var(--brand-soft); color: var(--brand); }
-    .button.ghost { min-height: 42px; background: transparent; color: var(--brand); }
-    .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .back { display: inline-flex; align-items: center; gap: 7px; margin: 4px 0 20px; color: var(--muted); font-size: 14px; font-weight: 700; }
-    .divider { height: 1px; margin: 16px 0; background: var(--line); }
-    .progress-track { height: 8px; overflow: hidden; border-radius: 99px; background: var(--surface-alt); }
-    .progress-track span { display: block; height: 100%; border-radius: inherit; background: var(--brand); }
-    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .stat { padding: 14px; border-radius: 17px; background: var(--surface-alt); }
-    .stat strong { display: block; font-size: 23px; letter-spacing: -.04em; }
-    .stat span { color: var(--muted); font-size: 12px; }
-    .list-row { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
-    .list-row:last-child { padding-bottom: 0; border-bottom: 0; }
-    .icon-tile { display: grid; flex: 0 0 42px; place-items: center; width: 42px; height: 42px; border-radius: 14px; background: var(--brand-soft); font-size: 19px; }
-    .list-copy { flex: 1; min-width: 0; }
-    .list-copy strong { display: block; font-size: 14px; }
-    .list-copy span { display: block; color: var(--muted); font-size: 12px; }
-    .topic-line { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 7px; margin: 14px 0; }
-    .topic-line .progress-track { grid-column: 1 / -1; }
-    .choice-list { display: grid; gap: 10px; margin: 16px 0; }
-    .choice { position: relative; }
-    .choice input { position: absolute; width: 1px; height: 1px; opacity: 0; }
-    .choice label {
-      display: flex; align-items: center; gap: 12px; min-height: 54px; padding: 13px 15px;
-      border: 1px solid var(--line); border-radius: 15px; background: var(--surface);
-      cursor: pointer; font-weight: 650;
-    }
-    .choice label::before {
-      content: ""; flex: 0 0 18px; width: 18px; height: 18px;
-      border: 2px solid var(--line); border-radius: 50%;
-    }
-    .choice input:checked + label { border-color: var(--brand); background: var(--brand-soft); }
-    .choice input:checked + label::before { border: 5px solid var(--brand); }
-    .choice input:focus-visible + label { outline: 3px solid var(--accent); outline-offset: 2px; }
-    .answer-letter { color: var(--brand); font-size: 12px; font-weight: 800; }
-    .callout { padding: 14px; border-left: 3px solid var(--accent); border-radius: 12px; background: var(--accent-soft); }
-    .callout p { margin: 0; color: var(--text); font-size: 13px; }
-    .bottom-nav {
-      position: sticky; bottom: 10px; display: grid; grid-template-columns: repeat(4, 1fr);
-      gap: 4px; margin: 20px 0 0; padding: 8px;
-      border: 1px solid var(--line); border-radius: 19px; background: var(--surface);
-      box-shadow: var(--shadow);
-    }
-    .bottom-nav a { padding: 8px 2px; border-radius: 12px; color: var(--muted); font-size: 11px; font-weight: 700; text-align: center; }
-    .bottom-nav a span { display: block; margin-bottom: 2px; font-size: 17px; }
-    .bottom-nav a:hover { background: var(--brand-soft); color: var(--brand); }
-    details { margin: 10px 0; padding: 13px 15px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-    summary { color: var(--text); cursor: pointer; font-weight: 750; }
-    details p { margin: 10px 0 0; font-size: 13px; }
-
-    @media (min-width: 700px) {
-      .screens { padding-top: 42px; }
-      .screen { width: min(100%, 620px); }
-      .card { padding: 24px; }
-      .hero { padding: 32px; }
-      .bottom-nav { position: static; }
-    }
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+    *{box-sizing:border-box}
+    html{min-height:100%;scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(ellipse at 20% 0%,var(--soft),transparent 34rem),var(--bg);color:var(--text);
+      font:16px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:inherit;text-decoration:none}
+    .screens{min-height:100vh;padding:20px 16px 40px}
+    .screen{display:none;width:min(100%,560px);margin:0 auto}
+    .screen:target{display:block}
+    .screens:not(:has(.screen:target)) #welcome{display:block}
+    .app-header,.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .app-header{margin:2px 0 24px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em}
+    .brand-mark{display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:var(--brand);color:white;font-size:20px}
+    .brand-name{font-size:17px}.brand-name small{display:block;color:var(--muted);font-size:10px;letter-spacing:.06em}
+    .avatar{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--accent-soft);font-weight:800}
+    .eyebrow{margin:0 0 8px;color:var(--brand);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+    h1,h2,h3,p{margin-top:0} h1{margin-bottom:10px;font-size:clamp(30px,8vw,42px);line-height:1.08;letter-spacing:-.045em}
+    h2{margin-bottom:8px;font-size:24px;line-height:1.18;letter-spacing:-.03em} h3{margin-bottom:6px;font-size:16px}
+    p{color:var(--muted)} .lead{margin-bottom:22px;font-size:16px}
+    .card{padding:20px;margin:14px 0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .compact{padding:16px}.hero{padding:26px 22px;margin:0 0 16px;border-radius:27px;background:var(--brand);color:white;box-shadow:var(--shadow)}
+    .hero h2{font-size:28px}.hero p{color:rgba(255,255,255,.82)}.hero .eyebrow{color:#c3f2da}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--soft);color:var(--brand);font-size:12px;font-weight:750}
+    .badge.amber{background:var(--accent-soft);color:var(--text)}.badge.red{background:var(--danger-soft);color:var(--danger)}
+    .button{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:12px 17px;border-radius:15px;background:var(--brand);color:white;font-weight:800;text-align:center}
+    .button:hover{background:var(--strong)}.button.secondary{background:var(--soft);color:var(--brand)}.button.ghost{background:transparent;color:var(--brand)}
+    .button-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stack{display:grid;gap:10px}
+    .back{display:inline-flex;margin:4px 0 18px;color:var(--muted);font-size:14px;font-weight:700}
+    .divider{height:1px;margin:16px 0;background:var(--line)}.small{font-size:13px}.tiny{font-size:11px}.muted{color:var(--muted)}
+    .callout{padding:14px;border-left:3px solid var(--accent);border-radius:12px;background:var(--accent-soft)}
+    .callout p{margin:0;color:var(--text);font-size:13px}
+    .progress-track{height:8px;overflow:hidden;border-radius:99px;background:var(--alt)}
+    .progress-track span{display:block;height:100%;border-radius:inherit;background:var(--brand)}
+    .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .stat{padding:14px;border-radius:16px;background:var(--alt)}.stat strong{display:block;font-size:22px;letter-spacing:-.04em}
+    .stat span{color:var(--muted);font-size:12px}
+    .list-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+    .list-row:last-child{padding-bottom:0;border-bottom:0}
+    .icon-tile{display:grid;flex:0 0 42px;place-items:center;width:42px;height:42px;border-radius:14px;background:var(--soft);font-size:19px}
+    .list-copy{flex:1;min-width:0}.list-copy strong{display:block;font-size:14px}.list-copy span{display:block;color:var(--muted);font-size:12px}
+    .topic-line{display:grid;grid-template-columns:1fr auto;gap:7px;margin:14px 0}.topic-line .progress-track{grid-column:1/-1}
+    .choice-list{display:grid;gap:9px;margin:15px 0}.choice{position:relative}
+    .choice input{position:absolute;width:1px;height:1px;opacity:0}
+    .choice label{display:flex;align-items:center;gap:11px;min-height:51px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--surface);cursor:pointer;font-weight:650}
+    .choice label:before{content:"";flex:0 0 18px;width:18px;height:18px;border:2px solid var(--line);border-radius:50%}
+    .choice input:checked+label{border-color:var(--brand);background:var(--soft)}
+    .choice input:checked+label:before{border:5px solid var(--brand)}
+    .choice input:focus-visible+label{outline:3px solid var(--accent);outline-offset:2px}
+    .answer-letter{color:var(--brand);font-size:12px;font-weight:800}
+    .bottom-nav{position:sticky;bottom:10px;display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:20px 0 0;padding:7px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow)}
+    .bottom-nav a{padding:7px 1px;border-radius:11px;color:var(--muted);font-size:10px;font-weight:700;text-align:center}
+    .bottom-nav a span{display:block;font-size:16px}.bottom-nav a:hover{background:var(--soft);color:var(--brand)}
+    details{margin:10px 0;padding:13px 15px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+    summary{cursor:pointer;font-weight:750}
+    @media(min-width:700px){.screens{padding-top:40px}.screen{width:min(100%,620px)}.card{padding:24px}.hero{padding:32px}.bottom-nav{position:static}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
 </head>
 <body>
-  <main class="screens">
+<main class="screens">
 
-    <section class="screen" id="welcome" aria-labelledby="welcome-title">
-      <header class="app-header">
-        <div class="brand"><span class="brand-mark">அ</span><span class="brand-name">ArivuVazhi<small>PATH OF KNOWLEDGE</small></span></div>
-        <span class="badge">Student preview</span>
-      </header>
-      <div class="hero">
-        <p class="eyebrow">Your preparation, made clearer</p>
-        <h1 id="welcome-title">Small steps.<br>Stronger preparation.</h1>
-        <p>A personal training coach for your government exam journey.</p>
-      </div>
-      <div class="card">
-        <h2>Start with a plan that fits you.</h2>
-        <p class="lead">Set your goal, understand your starting point, and focus on what to do next.</p>
-        <div class="stack">
-          <a class="button" href="#exam-setup">Get started <span aria-hidden="true">→</span></a>
-          <a class="button secondary" href="#home">Explore student home</a>
-        </div>
-        <p class="tiny muted" style="margin:16px 0 0">Prototype only · Sample details · No account required</p>
-      </div>
-      <div class="stat-grid">
-        <div class="stat"><strong>01</strong><span>Know your baseline</span></div>
-        <div class="stat"><strong>02</strong><span>Practice with purpose</span></div>
-      </div>
-    </section>
+  <section class="screen" id="welcome" aria-labelledby="welcome-title">
+    <header class="app-header"><div class="brand"><span class="brand-mark">அ</span><span class="brand-name">ArivuVazhi<small>PATH OF KNOWLEDGE</small></span></div><span class="badge">Student preview</span></header>
+    <div class="hero"><p class="eyebrow">Your preparation, made clearer</p><h1 id="welcome-title">Small steps.<br>Stronger preparation.</h1><p>A personal training coach for your government exam journey.</p></div>
+    <div class="card"><h2>Start with a plan that fits you.</h2><p class="lead">Set your goal, understand your starting point, and focus on what to do next.</p>
+      <div class="stack"><a class="button" href="#login">Sign in / create account →</a><a class="button secondary" href="#home">Explore sample student home</a></div>
+      <p class="tiny muted" style="margin:15px 0 0">Clickable preview · Sample details · Nothing is connected or saved</p>
+    </div>
+    <div class="stat-grid"><div class="stat"><strong>01</strong><span>Know your baseline</span></div><div class="stat"><strong>02</strong><span>Practice with purpose</span></div></div>
+  </section>
 
-    <section class="screen" id="exam-setup" aria-labelledby="setup-title">
-      <a class="back" href="#welcome">← Back</a>
-      <p class="eyebrow">Step 1 of 3 · Your goal</p>
-      <h1 id="setup-title">What are you preparing for?</h1>
-      <p class="lead">The first exam is not yet confirmed. Choose a sample option here to preview the setup flow.</p>
-      <div class="card">
-        <h3>Sample exam selection</h3>
-        <div class="choice-list">
-          <div class="choice"><input type="radio" name="exam" id="exam-a" checked><label for="exam-a">State public service exam <span class="badge amber">Sample</span></label></div>
-          <div class="choice"><input type="radio" name="exam" id="exam-b"><label for="exam-b">Central government exam <span class="badge amber">Sample</span></label></div>
-          <div class="choice"><input type="radio" name="exam" id="exam-c"><label for="exam-c">I’ll choose later</label></div>
-        </div>
-        <div class="divider"></div>
-        <h3>Set a target date</h3>
-        <p class="small">For this preview, your target is <strong>15 December 2026</strong>.</p>
-        <div class="callout"><p>Exam dates and rules are illustrative. Confirmed exam requirements will be added after the target exam is locked.</p></div>
-      </div>
-      <div class="card compact">
-        <div class="row"><strong>Study availability</strong><span class="badge">Flexible</span></div>
-        <p class="small" style="margin:8px 0 0">Suggested starting point: 1 hour a day, 5 days a week.</p>
-      </div>
-      <a class="button" href="#assessment">Continue to baseline assessment →</a>
-    </section>
+  <section class="screen" id="login" aria-labelledby="login-title">
+    <a class="back" href="#welcome">← Back</a><p class="eyebrow">Student account · Preview</p><h1 id="login-title">Welcome to your study space.</h1>
+    <p class="lead">Authentication is part of the product journey. This prototype has no account service.</p>
+    <div class="card"><h3>Sign in or register</h3><p class="small">Enter an example account detail to preview the next step. No information is submitted or stored.</p>
+      <div class="callout"><p>AI Coach use is intended for authenticated learners. The Coach shown here is a static sample, not a live service.</p></div>
+    </div>
+    <a class="button" href="#language-setup">Continue to language preferences →</a>
+  </section>
 
-    <section class="screen" id="assessment" aria-labelledby="assessment-title">
-      <a class="back" href="#exam-setup">← Back to goal</a>
-      <p class="eyebrow">Starting point · Sample assessment</p>
-      <div class="row"><h1 id="assessment-title">Let’s find your baseline.</h1><span class="badge">1 of 5</span></div>
-      <div class="progress-track" aria-label="Assessment progress"><span style="width:20%"></span></div>
-      <div class="card">
-        <span class="badge amber">General reasoning · Demo question</span>
-        <h2 style="margin-top:16px">What number comes next?</h2>
-        <p class="lead">2, 4, 8, 16, ___</p>
-        <div class="choice-list">
-          <div class="choice"><input type="radio" name="baseline" id="base-a"><label for="base-a"><span class="answer-letter">A</span> 24</label></div>
-          <div class="choice"><input type="radio" name="baseline" id="base-b" checked><label for="base-b"><span class="answer-letter">B</span> 32</label></div>
-          <div class="choice"><input type="radio" name="baseline" id="base-c"><label for="base-c"><span class="answer-letter">C</span> 30</label></div>
-          <div class="choice"><input type="radio" name="baseline" id="base-d"><label for="base-d"><span class="answer-letter">D</span> 18</label></div>
-        </div>
-        <p class="tiny muted">Practice sample only—not an official exam question.</p>
-      </div>
-      <div class="button-row">
-        <a class="button secondary" href="#exam-setup">Pause</a>
-        <a class="button" href="#learning-profile">See my profile →</a>
-      </div>
-    </section>
+  <section class="screen" id="language-setup" aria-labelledby="language-title">
+    <a class="back" href="#login">← Back</a><p class="eyebrow">Setup · Language preferences</p><h1 id="language-title">Choose your languages.</h1>
+    <p class="lead">App language and Exam/Study Language are separate preferences. You can change them later in settings.</p>
+    <div class="card"><h3>App Language</h3><div class="choice-list">
+      <div class="choice"><input type="radio" name="app-language" id="app-en" checked><label for="app-en">English</label></div>
+      <div class="choice"><input type="radio" name="app-language" id="app-ta"><label for="app-ta">தமிழ் (Tamil)</label></div>
+    </div><div class="divider"></div><h3>Exam/Study Language</h3><div class="choice-list">
+      <div class="choice"><input type="radio" name="study-language" id="study-en" checked><label for="study-en">English</label></div>
+      <div class="choice"><input type="radio" name="study-language" id="study-ta"><label for="study-ta">தமிழ் (Tamil)</label></div>
+    </div><div class="callout"><p>Study material and factual Coach answers depend on approved content being available in your selected language. This preview does not establish content availability.</p></div></div>
+    <a class="button" href="#exam-setup">Choose an active exam program →</a>
+  </section>
 
-    <section class="screen" id="learning-profile" aria-labelledby="profile-title">
-      <a class="back" href="#assessment">← Back to assessment</a>
-      <p class="eyebrow">Baseline complete</p>
-      <h1 id="profile-title">Your learning profile</h1>
-      <p class="lead">A starting snapshot—not a prediction of exam success.</p>
-      <div class="hero">
-        <span class="badge" style="background:rgba(255,255,255,.16);color:white">Sample assessment result</span>
-        <h2 style="margin-top:14px">A steady place to begin</h2>
-        <p>Use practice to build familiarity, then check progress again over time.</p>
-      </div>
-      <div class="card">
-        <h3>Topic snapshot</h3>
-        <div class="topic-line"><strong>Number patterns</strong><span class="small">4 / 5</span><div class="progress-track"><span style="width:80%"></span></div></div>
-        <div class="topic-line"><strong>Reading comprehension</strong><span class="small">3 / 5</span><div class="progress-track"><span style="width:60%"></span></div></div>
-        <div class="topic-line"><strong>General awareness</strong><span class="small">2 / 5</span><div class="progress-track"><span style="width:40%"></span></div></div>
-        <p class="tiny muted">Illustrative scores shown for the prototype.</p>
-      </div>
-      <a class="button" href="#plan">Build my first study plan →</a>
-    </section>
+  <section class="screen" id="exam-setup" aria-labelledby="setup-title">
+    <a class="back" href="#language-setup">← Back</a><p class="eyebrow">Setup · Active program</p><h1 id="setup-title">What are you preparing for?</h1>
+    <p class="lead">A learner has one active program at a time. Programs are introduced incrementally; launch availability is not confirmed here.</p>
+    <div class="card"><h3>Sample TNPSC program selection</h3><div class="choice-list">
+      <div class="choice"><input type="radio" name="exam" id="exam-a" checked><label for="exam-a">TNPSC Group IV <span class="badge amber">Illustrative only</span></label></div>
+      <div class="choice"><input type="radio" name="exam" id="exam-b"><label for="exam-b">Another supported TNPSC program <span class="badge amber">Not specified</span></label></div>
+    </div><p class="tiny muted">These choices illustrate the flow only. A program must be configured with its syllabus, approved content, and exam rules before it is offered.</p>
+      <div class="divider"></div><h3>Target date</h3><p class="small">Sample target: <strong>15 December 2026</strong>. This is not an official exam date.</p>
+      <div class="divider"></div><h3>Study availability</h3><p class="small">Sample schedule: <strong>1 hour a day · 5 days a week</strong>.</p>
+      <div class="callout"><p>Only the selected active program should scope the plan, practice, mocks, analytics, revisions, and Coach context. Inactive-program progress retention is undecided.</p></div>
+    </div>
+    <a class="button" href="#assessment">Continue to baseline assessment →</a>
+  </section>
 
-    <section class="screen" id="plan" aria-labelledby="plan-title">
-      <a class="back" href="#learning-profile">← Back to profile</a>
-      <p class="eyebrow">Your starter plan</p>
-      <h1 id="plan-title">A clear next step, every day.</h1>
-      <p class="lead">A sample schedule built around your selected availability and learning snapshot.</p>
-      <div class="card">
-        <div class="row"><h3>Today · 60 minutes</h3><span class="badge">3 activities</span></div>
-        <div class="list-row"><span class="icon-tile">📘</span><div class="list-copy"><strong>Learn: number patterns</strong><span>15 min · Build the basics</span></div><span class="badge">Next</span></div>
-        <div class="list-row"><span class="icon-tile">✍️</span><div class="list-copy"><strong>Practice: 10 questions</strong><span>25 min · General reasoning</span></div></div>
-        <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Revise: saved mistakes</strong><span>20 min · 3 items due</span></div></div>
-      </div>
-      <div class="callout"><p><strong>Plan note</strong> · Treat this as a guide. Your practice results can help you decide what to focus on next.</p></div>
-      <a class="button" style="margin-top:16px" href="#home">Go to my home</a>
-    </section>
+  <section class="screen" id="assessment" aria-labelledby="assessment-title">
+    <a class="back" href="#exam-setup">← Back to setup</a><p class="eyebrow">Active program · Sample assessment</p><div class="row"><h1 id="assessment-title">Let’s find your baseline.</h1><span class="badge">1 of 5</span></div>
+    <div class="progress-track"><span style="width:20%"></span></div>
+    <div class="card"><span class="badge amber">Number patterns · Demo question</span><h2 style="margin-top:15px">What number comes next?</h2><p class="lead">2, 4, 8, 16, ___</p>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="baseline" id="base-a"><label for="base-a"><span class="answer-letter">A</span>24</label></div>
+        <div class="choice"><input type="radio" name="baseline" id="base-b"><label for="base-b"><span class="answer-letter">B</span>32</label></div>
+        <div class="choice"><input type="radio" name="baseline" id="base-c"><label for="base-c"><span class="answer-letter">C</span>30</label></div>
+        <div class="choice"><input type="radio" name="baseline" id="base-d"><label for="base-d"><span class="answer-letter">D</span>18</label></div>
+      </div><p class="tiny muted">Illustrative practice sample, not an official exam question.</p>
+    </div>
+    <div class="button-row"><a class="button secondary" href="#exam-setup">Pause</a><a class="button" href="#learning-profile">See sample profile →</a></div>
+  </section>
 
-    <section class="screen" id="home" aria-labelledby="home-title">
-      <header class="app-header">
-        <div class="brand"><span class="brand-mark">அ</span><span class="brand-name">ArivuVazhi<small>YOUR STUDY SPACE</small></span></div>
-        <span class="avatar" aria-label="Student profile">S</span>
-      </header>
-      <p class="eyebrow">Tuesday · Sample dashboard</p>
-      <h1 id="home-title">Good morning, learner.</h1>
-      <div class="hero">
-        <div class="row"><span class="badge" style="background:rgba(255,255,255,.16);color:white">Your preparation</span><strong>18%</strong></div>
-        <div class="progress-track" style="margin:16px 0;background:rgba(255,255,255,.25)"><span style="width:18%;background:#fff"></span></div>
-        <p style="margin-bottom:0">Progress reflects practice completed in this sample profile.</p>
-      </div>
-      <div class="stat-grid">
-        <div class="stat"><strong>🔥 4 days</strong><span>Current study streak</span></div>
-        <div class="stat"><strong>72%</strong><span>Practice accuracy</span></div>
-      </div>
-      <div class="card">
-        <div class="row"><h3>Today’s plan</h3><a class="small" href="#plan" style="color:var(--brand);font-weight:800">View plan</a></div>
-        <div class="list-row"><span class="icon-tile">✍️</span><div class="list-copy"><strong>Reasoning practice</strong><span>10 questions · about 25 min</span></div><span class="badge">Start</span></div>
-        <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Revision due</strong><span>3 saved items to revisit</span></div><a href="#revision" aria-label="Open revision">→</a></div>
-      </div>
-      <div class="card compact">
-        <div class="row"><div><p class="eyebrow">Your next action</p><h3 style="margin:0">Try a short practice set</h3></div><span class="icon-tile">🎯</span></div>
-        <a class="button" style="margin-top:14px" href="#practice">Start practice →</a>
-      </div>
-      <nav class="bottom-nav" aria-label="Main navigation">
-        <a href="#home"><span>⌂</span>Home</a><a href="#practice"><span>✎</span>Practice</a><a href="#mock-intro"><span>▤</span>Mock</a><a href="#coach"><span>✦</span>AI Coach</a>
-      </nav>
-    </section>
+  <section class="screen" id="learning-profile" aria-labelledby="profile-title">
+    <a class="back" href="#assessment">← Back</a><p class="eyebrow">Baseline complete · Sample</p><h1 id="profile-title">Your learning profile.</h1><p class="lead">A starting snapshot—not a prediction of exam success.</p>
+    <div class="hero"><span class="badge">Illustrative assessment result</span><h2 style="margin-top:14px">A steady place to begin</h2><p>Build familiarity with practice and review your progress over time.</p></div>
+    <div class="card"><h3>Topic snapshot</h3>
+      <div class="topic-line"><strong>Number patterns</strong><span class="small">4 / 5</span><div class="progress-track"><span style="width:80%"></span></div></div>
+      <div class="topic-line"><strong>Reading comprehension</strong><span class="small">3 / 5</span><div class="progress-track"><span style="width:60%"></span></div></div>
+      <div class="topic-line"><strong>General awareness</strong><span class="small">2 / 5</span><div class="progress-track"><span style="width:40%"></span></div></div>
+      <p class="tiny muted">Sample data only; no exam-specific content availability is implied.</p>
+    </div><a class="button" href="#plan">Build a starter plan →</a>
+  </section>
 
-    <section class="screen" id="practice" aria-labelledby="practice-title">
-      <a class="back" href="#home">← Home</a>
-      <p class="eyebrow">Practice · General reasoning</p>
-      <div class="row"><h1 id="practice-title">Let’s practice.</h1><span class="badge">Question 1 of 10</span></div>
-      <div class="progress-track"><span style="width:10%"></span></div>
-      <div class="card">
-        <span class="badge amber">Number patterns · Demo</span>
-        <h2 style="margin-top:15px">What number completes the pattern?</h2>
-        <p class="lead">3, 6, 12, 24, ___</p>
-        <div class="choice-list">
-          <div class="choice"><input type="radio" name="practice" id="prac-a"><label for="prac-a"><span class="answer-letter">A</span> 36</label></div>
-          <div class="choice"><input type="radio" name="practice" id="prac-b"><label for="prac-b"><span class="answer-letter">B</span> 42</label></div>
-          <div class="choice"><input type="radio" name="practice" id="prac-c"><label for="prac-c"><span class="answer-letter">C</span> 48</label></div>
-          <div class="choice"><input type="radio" name="practice" id="prac-d"><label for="prac-d"><span class="answer-letter">D</span> 30</label></div>
-        </div>
-        <p class="tiny muted">Sample learning content; not represented as an official exam item.</p>
-      </div>
-      <div class="button-row">
-        <a class="button secondary" href="#home">Exit set</a>
-        <a class="button" href="#practice-result">Check answer</a>
-      </div>
-    </section>
+  <section class="screen" id="plan" aria-labelledby="plan-title">
+    <a class="back" href="#learning-profile">← Back</a><p class="eyebrow">Your starter plan · Sample</p><h1 id="plan-title">A clear next step, every day.</h1><p class="lead">Example schedule based on the sample availability and learning snapshot.</p>
+    <div class="card"><div class="row"><h3>Today · 60 minutes</h3><span class="badge">3 activities</span></div>
+      <div class="list-row"><span class="icon-tile">📘</span><div class="list-copy"><strong>Learn: number patterns</strong><span>15 min · Build the basics</span></div><span class="badge">Next</span></div>
+      <div class="list-row"><span class="icon-tile">✍️</span><div class="list-copy"><strong>Practice: 10 questions</strong><span>25 min · General reasoning</span></div></div>
+      <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Revise saved mistakes</strong><span>20 min · 3 sample items</span></div></div>
+    </div><div class="callout"><p>Sample plan only. Real study features depend on the active program and approved content availability.</p></div>
+    <a class="button" style="margin-top:16px" href="#home">Go to student home →</a>
+  </section>
 
-    <section class="screen" id="practice-result" aria-labelledby="result-title">
-      <a class="back" href="#practice">← Back to question</a>
-      <p class="eyebrow">Practice feedback · Demo answer</p>
-      <div class="hero">
-        <span class="badge" style="background:rgba(255,255,255,.16);color:white">Correct answer: C · 48</span>
-        <h2 id="result-title" style="margin-top:14px">Good work—spot the pattern.</h2>
-        <p>Each number is multiplied by 2 to get the next number.</p>
-      </div>
-      <div class="card">
-        <h3>Explanation</h3>
-        <p>3 × 2 = 6, 6 × 2 = 12, and 12 × 2 = 24. Continue the same rule: 24 × 2 = <strong>48</strong>.</p>
-        <div class="divider"></div>
-        <div class="row"><span class="small muted">Topic accuracy</span><strong>72% <span class="tiny muted">· sample</span></strong></div>
-      </div>
-      <div class="button-row">
-        <a class="button secondary" href="#mistakes">Save to mistakes</a>
-        <a class="button" href="#practice">Next question →</a>
-      </div>
-      <div style="margin-top:10px"><a class="button ghost" href="#coach">Ask AI Coach about this</a></div>
-    </section>
+  <section class="screen" id="home" aria-labelledby="home-title">
+    <header class="app-header"><div class="brand"><span class="brand-mark">அ</span><span class="brand-name">ArivuVazhi<small>YOUR STUDY SPACE</small></span></div><a class="avatar" href="#settings" aria-label="Settings">S</a></header>
+    <p class="eyebrow">Sample dashboard · Active context</p><h1 id="home-title">Good morning, learner.</h1>
+    <div class="card compact"><div class="row"><div><strong>Active program</strong><div class="small muted">TNPSC Group IV · Sample only</div></div><a class="badge" href="#settings">Manage</a></div><div class="small muted">Exam/Study Language: English · sample preference</div></div>
+    <div class="hero"><div class="row"><span class="badge">Your preparation</span><strong>18%</strong></div><div class="progress-track" style="margin:15px 0;background:rgba(255,255,255,.25)"><span style="width:18%;background:#fff"></span></div><p>Sample progress for this active-program view.</p></div>
+    <div class="stat-grid"><div class="stat"><strong>🔥 4 days</strong><span>Sample study streak</span></div><div class="stat"><strong>72%</strong><span>Sample practice accuracy</span></div></div>
+    <div class="card"><div class="row"><h3>Today’s plan</h3><a class="badge" href="#plan">View plan</a></div>
+      <div class="list-row"><span class="icon-tile">✍️</span><div class="list-copy"><strong>Reasoning practice</strong><span>10 questions · about 25 min</span></div><a href="#practice">Start →</a></div>
+      <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Revision due</strong><span>3 sample items</span></div><a href="#revision">→</a></div>
+    </div>
+    <div class="card compact"><p class="eyebrow">Your next action</p><h3>Try a short practice set</h3><a class="button" href="#practice">Choose difficulty →</a></div>
+    <nav class="bottom-nav" aria-label="Main navigation"><a href="#home"><span>⌂</span>Home</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#mock-intro"><span>▤</span>Mock</a><a href="#mistakes"><span>↻</span>Review</a><a href="#coach"><span>✦</span>Coach</a></nav>
+  </section>
 
-    <section class="screen" id="mistakes" aria-labelledby="mistakes-title">
-      <a class="back" href="#home">← Home</a>
-      <p class="eyebrow">Your mistake book</p>
-      <h1 id="mistakes-title">Turn mistakes into progress.</h1>
-      <p class="lead">Review saved questions and revisit the idea behind each answer.</p>
-      <div class="card">
-        <div class="row"><h3>Saved for review</h3><span class="badge red">3 items</span></div>
-        <div class="list-row"><span class="icon-tile">↗</span><div class="list-copy"><strong>Number patterns</strong><span>Saved today · Repeat practice</span></div><a href="#revision">→</a></div>
-        <div class="list-row"><span class="icon-tile">📖</span><div class="list-copy"><strong>Reading comprehension</strong><span>Saved yesterday · Review explanation</span></div><a href="#revision">→</a></div>
-        <div class="list-row"><span class="icon-tile">🧭</span><div class="list-copy"><strong>General awareness</strong><span>Saved 3 days ago · Revisit concept</span></div><a href="#revision">→</a></div>
-      </div>
-      <div class="callout"><p>Mistake review is for learning. A missed question is useful information about what to practice next.</p></div>
-      <a class="button" style="margin-top:16px" href="#revision">Open revision queue →</a>
-    </section>
+  <section class="screen" id="practice-setup" aria-labelledby="practice-setup-title">
+    <a class="back" href="#home">← Home</a><p class="eyebrow">Practice · Active program sample</p><h1 id="practice-setup-title">Set up your practice.</h1>
+    <div class="card"><h3>Choose a topic</h3><div class="choice-list">
+      <div class="choice"><input type="radio" name="topic" id="topic-a" checked><label for="topic-a">Number patterns <span class="badge amber">Demo content</span></label></div>
+      <div class="choice"><input type="radio" name="topic" id="topic-b"><label for="topic-b">Reading comprehension</label></div>
+      <div class="choice"><input type="radio" name="topic" id="topic-c"><label for="topic-c">General awareness</label></div>
+    </div><div class="divider"></div><h3>Choose difficulty</h3><p class="small">Question selection should use the selected difficulty.</p><div class="choice-list">
+      <div class="choice"><input type="radio" name="difficulty" id="easy"><label for="easy">Easy</label></div>
+      <div class="choice"><input type="radio" name="difficulty" id="medium" checked><label for="medium">Medium</label></div>
+      <div class="choice"><input type="radio" name="difficulty" id="hard"><label for="hard">Hard</label></div>
+      <div class="choice"><input type="radio" name="difficulty" id="very-hard"><label for="very-hard">Very Hard</label></div>
+    </div><p class="tiny muted">Difficulty and topic choices are illustrative. Actual practice must follow the selected active program’s approved syllabus and rules.</p></div>
+    <a class="button" href="#practice">Start sample practice →</a>
+  </section>
 
-    <section class="screen" id="revision" aria-labelledby="revision-title">
-      <a class="back" href="#home">← Home</a>
-      <p class="eyebrow">Revision · Spaced review</p>
-      <h1 id="revision-title">A few ideas to revisit.</h1>
-      <p class="lead">A simple sample schedule prioritizes saved mistakes and recent practice.</p>
-      <div class="card">
-        <div class="row"><h3>Due today</h3><span class="badge amber">3 to review</span></div>
-        <div class="list-row"><span class="icon-tile">1</span><div class="list-copy"><strong>Number patterns</strong><span>Review the doubling rule · 5 min</span></div><span class="badge">High</span></div>
-        <div class="list-row"><span class="icon-tile">2</span><div class="list-copy"><strong>Reading comprehension</strong><span>Check evidence in a passage · 8 min</span></div></div>
-        <div class="list-row"><span class="icon-tile">3</span><div class="list-copy"><strong>General awareness</strong><span>Revisit saved concept · 7 min</span></div></div>
-      </div>
-      <div class="card compact">
-        <h3>How revision is spaced</h3>
-        <p class="small" style="margin:0">Example intervals: Day 1 → Day 3 → Day 7 → Day 15 → Day 30. The queue can adapt as more learning data becomes available.</p>
-      </div>
-      <a class="button" href="#practice">Practice a topic →</a>
-      <a class="button ghost" href="#mistakes">View mistake book</a>
-    </section>
+  <section class="screen" id="practice" aria-labelledby="practice-title">
+    <a class="back" href="#practice-setup">← Practice setup</a><p class="eyebrow">Practice · Number patterns · Medium (sample)</p><div class="row"><h1 id="practice-title">Let’s practice.</h1><span class="badge">1 of 10</span></div>
+    <div class="progress-track"><span style="width:10%"></span></div><div class="card"><span class="badge amber">Demo question</span><h2 style="margin-top:15px">What number completes the pattern?</h2><p class="lead">3, 6, 12, 24, ___</p>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="practice" id="prac-a"><label for="prac-a"><span class="answer-letter">A</span>36</label></div>
+        <div class="choice"><input type="radio" name="practice" id="prac-b"><label for="prac-b"><span class="answer-letter">B</span>42</label></div>
+        <div class="choice"><input type="radio" name="practice" id="prac-c"><label for="prac-c"><span class="answer-letter">C</span>48</label></div>
+        <div class="choice"><input type="radio" name="practice" id="prac-d"><label for="prac-d"><span class="answer-letter">D</span>30</label></div>
+      </div><p class="tiny muted">Sample learning content; not an official exam item.</p>
+    </div><div class="button-row"><a class="button secondary" href="#home">Exit set</a><a class="button" href="#practice-result">Check answer →</a></div>
+  </section>
 
-    <section class="screen" id="mock-intro" aria-labelledby="mock-title">
-      <a class="back" href="#home">← Home</a>
-      <p class="eyebrow">Mock test · Sample</p>
-      <h1 id="mock-title">Check your progress with a mini mock.</h1>
-      <p class="lead">A low-pressure timed practice to review what you know and choose a next focus.</p>
-      <div class="card">
-        <div class="stat-grid">
-          <div class="stat"><strong>10</strong><span>Sample questions</span></div>
-          <div class="stat"><strong>15 min</strong><span>Suggested duration</span></div>
-        </div>
-        <div class="divider"></div>
-        <h3>Before you start</h3>
-        <div class="list-row"><span class="icon-tile">◷</span><div class="list-copy"><strong>Set aside 15 minutes</strong><span>The real timer is not active in this prototype.</span></div></div>
-        <div class="list-row"><span class="icon-tile">✓</span><div class="list-copy"><strong>Review your answers after</strong><span>Your sample result includes a training suggestion.</span></div></div>
-        <p class="tiny muted" style="margin:14px 0 0">Test format and exam rules are illustrative; the initial exam is not yet locked.</p>
-      </div>
-      <a class="button" href="#mock-question">Start sample mini mock →</a>
-    </section>
+  <section class="screen" id="practice-result" aria-labelledby="result-title">
+    <a class="back" href="#practice">← Back to question</a><p class="eyebrow">Immediate feedback · Demo answer</p>
+    <div class="hero"><span class="badge">Correct answer: C · 48</span><h2 id="result-title" style="margin-top:14px">Good work—spot the pattern.</h2><p>Each number is multiplied by 2 to get the next number.</p></div>
+    <div class="card"><h3>Explanation</h3><p>3 × 2 = 6, 6 × 2 = 12, and 12 × 2 = 24. Continue the same rule: 24 × 2 = <strong>48</strong>.</p><div class="divider"></div><div class="row"><span class="small muted">Topic accuracy</span><strong>72% · sample</strong></div></div>
+    <div class="button-row"><a class="button secondary" href="#mistakes">Review mistakes</a><a class="button" href="#practice">Next question →</a></div><a class="button ghost" href="#coach">Ask AI Coach about this</a>
+  </section>
 
-    <section class="screen" id="mock-question" aria-labelledby="mock-question-title">
-      <a class="back" href="#mock-intro">← Exit mock</a>
-      <p class="eyebrow">Mini mock · Sample test</p>
-      <div class="row"><h1 id="mock-question-title">Question 1</h1><span class="badge amber">Demo timer · 14:32</span></div>
-      <div class="progress-track"><span style="width:10%"></span></div>
-      <div class="card">
-        <h2 style="margin-top:5px">A book costs ₹80 after a 20% discount. What was its original price?</h2>
-        <div class="choice-list">
-          <div class="choice"><input type="radio" name="mock" id="mock-a"><label for="mock-a"><span class="answer-letter">A</span> ₹96</label></div>
-          <div class="choice"><input type="radio" name="mock" id="mock-b" checked><label for="mock-b"><span class="answer-letter">B</span> ₹100</label></div>
-          <div class="choice"><input type="radio" name="mock" id="mock-c"><label for="mock-c"><span class="answer-letter">C</span> ₹104</label></div>
-          <div class="choice"><input type="radio" name="mock" id="mock-d"><label for="mock-d"><span class="answer-letter">D</span> ₹120</label></div>
-        </div>
-        <div class="row"><span class="small muted">Question navigation</span><span class="badge">1 / 10</span></div>
-      </div>
-      <div class="button-row">
-        <a class="button secondary" href="#mock-intro">Review later</a>
-        <a class="button" href="#mock-results">Submit mock →</a>
-      </div>
-      <p class="tiny muted" style="margin-top:12px">Timer, answer selection, scoring, and exam rules are sample-only and not connected.</p>
-    </section>
+  <section class="screen" id="mistakes" aria-labelledby="mistakes-title">
+    <a class="back" href="#home">← Home</a><p class="eyebrow">Active-program review · Sample</p><h1 id="mistakes-title">Turn mistakes into progress.</h1><p class="lead">Review saved questions and revisit the ideas behind the answers.</p>
+    <div class="card"><div class="row"><h3>Saved for review</h3><span class="badge red">3 sample items</span></div>
+      <div class="list-row"><span class="icon-tile">↗</span><div class="list-copy"><strong>Number patterns</strong><span>Saved today · Repeat practice</span></div><a href="#revision">→</a></div>
+      <div class="list-row"><span class="icon-tile">📖</span><div class="list-copy"><strong>Reading comprehension</strong><span>Saved yesterday · Review explanation</span></div><a href="#revision">→</a></div>
+      <div class="list-row"><span class="icon-tile">🧭</span><div class="list-copy"><strong>General awareness</strong><span>Saved 3 days ago · Revisit concept</span></div><a href="#revision">→</a></div>
+    </div><div class="callout"><p>A missed question is useful information about what to practice next. These sample items are scoped to the displayed active-program view.</p></div>
+    <a class="button" style="margin-top:16px" href="#revision">Open revision queue →</a>
+  </section>
 
-    <section class="screen" id="mock-results" aria-labelledby="mock-results-title">
-      <a class="back" href="#home">← Home</a>
-      <p class="eyebrow">Mini mock complete</p>
-      <h1 id="mock-results-title">Here’s what this sample shows.</h1>
-      <div class="hero">
-        <span class="badge" style="background:rgba(255,255,255,.16);color:white">Illustrative result</span>
-        <h2 style="font-size:42px;margin:15px 0 3px">7 / 10</h2>
-        <p style="margin-bottom:0">A practice snapshot—not a prediction of exam success.</p>
-      </div>
-      <div class="stat-grid">
-        <div class="stat"><strong>7</strong><span>Correct</span></div>
-        <div class="stat"><strong>2</strong><span>Incorrect</span></div>
-        <div class="stat"><strong>1</strong><span>Skipped</span></div>
-        <div class="stat"><strong>70%</strong><span>Accuracy</span></div>
-      </div>
-      <div class="card">
-        <h3>Performance by topic</h3>
-        <div class="topic-line"><strong>Reasoning</strong><span class="small">80%</span><div class="progress-track"><span style="width:80%"></span></div></div>
-        <div class="topic-line"><strong>Comprehension</strong><span class="small">60%</span><div class="progress-track"><span style="width:60%"></span></div></div>
-        <div class="topic-line"><strong>Quantitative basics</strong><span class="small">60%</span><div class="progress-track"><span style="width:60%"></span></div></div>
-      </div>
-      <a class="button" href="#mock-analysis">See performance insights →</a>
-    </section>
+  <section class="screen" id="revision" aria-labelledby="revision-title">
+    <a class="back" href="#home">← Home</a><p class="eyebrow">Revision · Sample schedule</p><h1 id="revision-title">A few ideas to revisit.</h1><p class="lead">A sample queue based on saved mistakes and recent practice.</p>
+    <div class="card"><div class="row"><h3>Due today</h3><span class="badge amber">3 sample items</span></div>
+      <div class="list-row"><span class="icon-tile">1</span><div class="list-copy"><strong>Number patterns</strong><span>Review the doubling rule · 5 min</span></div><span class="badge">High</span></div>
+      <div class="list-row"><span class="icon-tile">2</span><div class="list-copy"><strong>Reading comprehension</strong><span>Check evidence in a passage · 8 min</span></div></div>
+      <div class="list-row"><span class="icon-tile">3</span><div class="list-copy"><strong>General awareness</strong><span>Revisit saved concept · 7 min</span></div></div>
+    </div><div class="card compact"><h3>Example spacing</h3><p class="small">Day 1 → Day 3 → Day 7 → Day 15 → Day 30. The real revision queue depends on learning data and the active program.</p></div>
+    <a class="button" href="#practice-setup">Practice a topic →</a><a class="button ghost" href="#mistakes">View mistake book</a>
+  </section>
 
-    <section class="screen" id="mock-analysis" aria-labelledby="analysis-title">
-      <a class="back" href="#mock-results">← Back to results</a>
-      <p class="eyebrow">Performance insights</p>
-      <h1 id="analysis-title">Use the result to plan your next move.</h1>
-      <div class="card">
-        <span class="badge">Sample interpretation</span>
-        <h2 style="margin-top:14px">Keep building accuracy in quantitative basics.</h2>
-        <p>Your sample results show stronger performance in reasoning. A short review of percentage questions may be a useful next practice step.</p>
-        <div class="callout"><p>These insights interpret the example metrics only. Scores are deterministic; any AI interpretation should be grounded in those results.</p></div>
-      </div>
-      <div class="card compact">
-        <h3>Suggested next training</h3>
-        <div class="list-row"><span class="icon-tile">％</span><div class="list-copy"><strong>Practice percentages</strong><span>10 questions · about 20 min</span></div></div>
-        <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Review saved mistakes</strong><span>3 items in your revision queue</span></div></div>
-      </div>
-      <div class="button-row">
-        <a class="button secondary" href="#revision">Revise</a>
-        <a class="button" href="#practice">Practice now →</a>
-      </div>
-    </section>
+  <section class="screen" id="mock-intro" aria-labelledby="mock-title">
+    <a class="back" href="#home">← Home</a><p class="eyebrow">Mock test · Sample only</p><h1 id="mock-title">Check your progress with a mini mock.</h1><p class="lead">A timed-practice preview with a sample result and next-step suggestion.</p>
+    <div class="card"><div class="stat-grid"><div class="stat"><strong>10</strong><span>Sample questions</span></div><div class="stat"><strong>15 min</strong><span>Suggested duration</span></div></div><div class="divider"></div>
+      <h3>Before you start</h3><div class="list-row"><span class="icon-tile">◷</span><div class="list-copy"><strong>Set aside 15 minutes</strong><span>The timer is not active in this prototype.</span></div></div>
+      <div class="list-row"><span class="icon-tile">✓</span><div class="list-copy"><strong>Review your answers after</strong><span>Sample analysis covers the example metrics.</span></div></div>
+      <p class="tiny muted">Test format, exam rules, and program availability are illustrative and unconfirmed.</p>
+    </div><a class="button" href="#mock-question">Start sample mini mock →</a>
+  </section>
 
-    <section class="screen" id="coach" aria-labelledby="coach-title">
-      <a class="back" href="#home">← Home</a>
-      <p class="eyebrow">AI Coach · Grounded learning help</p>
-      <h1 id="coach-title">Ask about your learning.</h1>
-      <p class="lead">Get an explanation, plan suggestion, or help understanding a mistake.</p>
-      <div class="card">
-        <div class="row"><span class="badge">Sample conversation</span><span class="tiny muted">No live AI connection</span></div>
-        <div class="callout" style="margin-top:16px"><p><strong>You</strong><br>Why is the answer to the pattern question 48?</p></div>
-        <div class="card compact" style="margin-bottom:0;box-shadow:none">
-          <span class="badge">Coach response · Demo</span>
-          <p style="margin:10px 0 0;color:var(--text)">The pattern doubles each time: 3 becomes 6, 6 becomes 12, and 12 becomes 24. Doubling 24 gives <strong>48</strong>.</p>
-          <p class="tiny muted" style="margin:12px 0 0">Example source: sample practice explanation · This is illustrative content, not a retrieved official source.</p>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Try a question</h3>
-        <div class="choice-list">
-          <div class="choice"><input type="radio" name="prompt" id="prompt-a" checked><label for="prompt-a">Explain a practice answer</label></div>
-          <div class="choice"><input type="radio" name="prompt" id="prompt-b"><label for="prompt-b">Help me plan my next study session</label></div>
-          <div class="choice"><input type="radio" name="prompt" id="prompt-c"><label for="prompt-c">Help me understand a mistake</label></div>
-        </div>
-        <p class="tiny muted">A connected coach should use approved knowledge for factual exam content and show source references.</p>
-        <a class="button secondary" href="#practice-result">View practice explanation</a>
-      </div>
-      <nav class="bottom-nav" aria-label="Main navigation">
-        <a href="#home"><span>⌂</span>Home</a><a href="#practice"><span>✎</span>Practice</a><a href="#mock-intro"><span>▤</span>Mock</a><a href="#coach"><span>✦</span>AI Coach</a>
-      </nav>
-    </section>
+  <section class="screen" id="mock-question" aria-labelledby="mock-question-title">
+    <a class="back" href="#mock-intro">← Exit mock</a><p class="eyebrow">Mini mock · Sample test</p><div class="row"><h1 id="mock-question-title">Question 1</h1><span class="badge amber">Demo timer · 14:32</span></div><div class="progress-track"><span style="width:10%"></span></div>
+    <div class="card"><h2>A book costs ₹80 after a 20% discount. What was its original price?</h2><div class="choice-list">
+      <div class="choice"><input type="radio" name="mock" id="mock-a"><label for="mock-a"><span class="answer-letter">A</span>₹96</label></div>
+      <div class="choice"><input type="radio" name="mock" id="mock-b"><label for="mock-b"><span class="answer-letter">B</span>₹100</label></div>
+      <div class="choice"><input type="radio" name="mock" id="mock-c"><label for="mock-c"><span class="answer-letter">C</span>₹104</label></div>
+      <div class="choice"><input type="radio" name="mock" id="mock-d"><label for="mock-d"><span class="answer-letter">D</span>₹120</label></div>
+    </div><div class="row"><span class="small muted">Question navigation</span><span class="badge">1 / 10</span></div></div>
+    <div class="button-row"><a class="button secondary" href="#mock-intro">Review later</a><a class="button" href="#mock-results">Submit mock →</a></div>
+    <p class="tiny muted">Timer, answer selection, scoring, and exam rules are sample-only. In a real test, scoring and configured rules are deterministic.</p>
+  </section>
 
-  </main>
+  <section class="screen" id="mock-results" aria-labelledby="mock-results-title">
+    <a class="back" href="#home">← Home</a><p class="eyebrow">Mini mock complete · Sample</p><h1 id="mock-results-title">Here’s what this example shows.</h1>
+    <div class="hero"><span class="badge">Illustrative result</span><h2 style="font-size:42px;margin:15px 0 3px">7 / 10</h2><p>A practice snapshot—not a prediction of exam success.</p></div>
+    <div class="stat-grid"><div class="stat"><strong>7</strong><span>Correct</span></div><div class="stat"><strong>2</strong><span>Incorrect</span></div><div class="stat"><strong>1</strong><span>Unanswered</span></div><div class="stat"><strong>70%</strong><span>Accuracy</span></div></div>
+    <div class="card"><h3>Performance by topic</h3>
+      <div class="topic-line"><strong>Reasoning</strong><span class="small">80%</span><div class="progress-track"><span style="width:80%"></span></div></div>
+      <div class="topic-line"><strong>Comprehension</strong><span class="small">60%</span><div class="progress-track"><span style="width:60%"></span></div></div>
+      <div class="topic-line"><strong>Quantitative basics</strong><span class="small">60%</span><div class="progress-track"><span style="width:60%"></span></div></div>
+      <p class="small">Subject/topic performance, timing, and recurring mistakes are shown when relevant data exists.</p>
+    </div><a class="button" href="#mock-analysis">See performance insights →</a>
+  </section>
+
+  <section class="screen" id="mock-analysis" aria-labelledby="analysis-title">
+    <a class="back" href="#mock-results">← Back to results</a><p class="eyebrow">Performance insights · Sample interpretation</p><h1 id="analysis-title">Choose your next move.</h1>
+    <div class="card"><span class="badge">Example analysis</span><h2 style="margin-top:14px">Keep building accuracy in quantitative basics.</h2>
+      <p>This sample shows stronger reasoning results. A short review of percentage questions may be a useful next practice step.</p>
+      <div class="callout"><p>Scores and deterministic metrics should be calculated by the exam engine. AI may explain those results, but must not replace the calculations or promise success.</p></div>
+    </div><div class="card compact"><h3>Suggested next training</h3>
+      <div class="list-row"><span class="icon-tile">％</span><div class="list-copy"><strong>Practice percentages</strong><span>10 questions · about 20 min</span></div></div>
+      <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Review saved mistakes</strong><span>3 sample items in the revision queue</span></div></div>
+    </div><div class="button-row"><a class="button secondary" href="#revision">Revise</a><a class="button" href="#practice-setup">Practice now →</a></div>
+  </section>
+
+  <section class="screen" id="coach" aria-labelledby="coach-title">
+    <a class="back" href="#home">← Home</a><p class="eyebrow">AI Coach · Exam-preparation support</p><h1 id="coach-title">Ask about your learning.</h1><p class="lead">A preview of help understanding a practice answer or planning a study session.</p>
+    <div class="card"><div class="row"><span class="badge">Static sample conversation</span><span class="tiny muted">No live AI connection</span></div>
+      <div class="callout" style="margin-top:16px"><p><strong>You</strong><br>Why is the answer to the pattern question 48?</p></div>
+      <div class="card compact"><span class="badge">Coach response · Demo</span><p style="margin:10px 0 0;color:var(--text)">The pattern doubles each time: 3 becomes 6, 6 becomes 12, and 12 becomes 24. Doubling 24 gives <strong>48</strong>.</p>
+        <p class="tiny muted" style="margin:12px 0 0">Example source: sample practice explanation. This is not a retrieved official source.</p></div>
+    </div>
+    <div class="card"><h3>Try a question</h3><div class="choice-list">
+      <div class="choice"><input type="radio" name="prompt" id="prompt-a" checked><label for="prompt-a">Explain a practice answer</label></div>
+      <div class="choice"><input type="radio" name="prompt" id="prompt-b"><label for="prompt-b">Help plan my next study session</label></div>
+      <div class="choice"><input type="radio" name="prompt" id="prompt-c"><label for="prompt-c">Help me understand a mistake</label></div>
+    </div><div class="callout"><p>A connected Coach should use only the authenticated learner’s active program and authorized context. Factual answers require approved knowledge in the selected study language; limitations should be clear when support is unavailable.</p></div>
+      <a class="button secondary" style="margin-top:14px" href="#practice-result">View sample practice explanation</a>
+    </div>
+    <nav class="bottom-nav" aria-label="Main navigation"><a href="#home"><span>⌂</span>Home</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#mock-intro"><span>▤</span>Mock</a><a href="#mistakes"><span>↻</span>Review</a><a href="#coach"><span>✦</span>Coach</a></nav>
+  </section>
+
+  <section class="screen" id="settings" aria-labelledby="settings-title">
+    <a class="back" href="#home">← Home</a><p class="eyebrow">Profile · Preferences</p><h1 id="settings-title">Your study settings.</h1>
+    <div class="card"><h3>Current sample preferences</h3><div class="list-row"><span class="icon-tile">◉</span><div class="list-copy"><strong>App Language</strong><span>English</span></div><span class="badge">Sample</span></div>
+      <div class="list-row"><span class="icon-tile">文</span><div class="list-copy"><strong>Exam/Study Language</strong><span>English · content availability not confirmed</span></div></div>
+      <div class="list-row"><span class="icon-tile">◎</span><div class="list-copy"><strong>Active program</strong><span>TNPSC Group IV · illustrative only</span></div></div>
+    </div>
+    <div class="card"><h3>Change language preferences</h3><p class="small">Both language preferences may be changed in settings. Content and Coach answers depend on approved availability.</p><a class="button secondary" href="#language-setup">Review language choices →</a></div>
+    <div class="card"><h3>Switch active exam program</h3><p class="small">Selecting another supported program replaces the current active context for learner-facing study features. Inactive-program progress retention has not been decided.</p><a class="button" href="#program-switch">Review program options →</a></div>
+  </section>
+
+  <section class="screen" id="program-switch" aria-labelledby="switch-title">
+    <a class="back" href="#settings">← Settings</a><p class="eyebrow">Active program · Sample switch</p><h1 id="switch-title">Choose one active program.</h1>
+    <p class="lead">When switched, the newly selected program alone becomes the context for your plans, practice, mocks, insights, revisions, and AI Coach.</p>
+    <div class="card"><div class="choice-list">
+      <div class="choice"><input type="radio" name="switch-exam" id="switch-a" checked><label for="switch-a">TNPSC Group IV <span class="badge amber">Current sample</span></label></div>
+      <div class="choice"><input type="radio" name="switch-exam" id="switch-b"><label for="switch-b">Another supported TNPSC program <span class="badge amber">Not specified</span></label></div>
+    </div><div class="callout"><p>Program availability and configuration are not confirmed by this preview. Whether inactive-program progress is retained is undecided; this screen does not assume a retention policy.</p></div></div>
+    <a class="button" href="#home">Preview active-program home →</a>
+  </section>
+
+</main>
 </body>
 </html>
