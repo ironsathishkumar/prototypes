@@ -1,20 +1,18 @@
 # ArivuVazhi — clickable prototype
 
 ## Run
-Open `index.html` in a modern browser; nothing to install.
+Open `index.html` in a modern browser; nothing to install. Best viewed as a phone-sized UI.
 
 ## Included
 - Welcome, sign-in, and registration entry point
-- App Language and Exam/Study Language preference setup
+- App Language and Exam/Study Language preferences
 - Active TNPSC program selection, sample goal, target date, and study availability
-- Initial assessment and sample learning profile
-- Starter plan and active-program student dashboard
-- Practice setup with topic selection and Easy, Medium, Hard, and Very Hard difficulty choices
-- Practice question, immediate feedback, and explanation
+- Initial assessment, sample learning profile, starter plan, and active-program dashboard
+- Practice topic selection, all four difficulty modes, question, immediate feedback, and explanation
 - Mistake book and revision queue
-- Mini mock instructions, sample question, results, and performance analysis
+- Mock hub with a focused subject/topic mock flow and a separate full mock instructions, question, result, and analysis flow
 - AI Coach sample conversation and grounding guidance
-- Settings, language preference changes, and active-program switching
+- Settings, language preference changes, active-program switching, and dedicated optional student feedback area
 
 ## Limitations
-Sample data only; nothing is connected or saved. Program availability, exam rules, question content, language coverage, scores, and Coach responses are illustrative. The initial exam program and approved content sources have not been confirmed. Inactive-program progress retention is undecided.
+Sample data only; nothing is connected or saved. Authentication, timers, answer selection, scoring, and feedback submission are not functional. Program availability, exam rules, questions, language coverage, scores, and Coach responses are illustrative. The initial exam program and approved content sources have not been confirmed. Inactive-program progress retention and feedback handling details are undecided. This is an HTML/CSS phone mockup.
