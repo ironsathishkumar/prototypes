@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F0F4F8">
+  <title>ArivuVazhi — Clickable Student Prototype</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --navy:#101D36; --cyan:#35C6E8; --teal:#0D8EA8; --ice:#E8F8FC;
+      --gray:#F0F4F8; --white:#FFFFFF; --slate:#64748B;
+      --success:#16A36A; --warning:#E9A23B; --error:#DC4C4C; --info:#2786C7;
+      --bg:var(--gray); --surface:var(--white); --surface-soft:#F7FAFC;
+      --text:var(--navy); --muted:var(--slate); --line:#DCE5ED;
+      --accent:var(--teal); --accent-soft:var(--ice); --shadow:0 16px 38px rgba(16,29,54,.10);
+      --radius:20px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme:dark; --bg:#0C1422; --surface:#152235; --surface-soft:#1B2B40;
+        --text:#F1F7FC; --muted:#B2C0CF; --line:#31445A; --accent:#55CBE5;
+        --accent-soft:#173545; --shadow:0 18px 42px rgba(0,0,0,.30);
+      }
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      min-height:100vh;margin:0;display:grid;place-items:center;padding:24px 12px;
+      background:radial-gradient(ellipse at 50% 0%,var(--accent-soft),transparent 34rem),var(--bg);
+      color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    a{color:inherit;text-decoration:none}
+    .device{
+      position:relative;width:min(100%,420px);height:min(900px,calc(100vh - 48px));min-height:650px;
+      overflow:hidden;border:1px solid var(--line);border-radius:38px;background:var(--surface);
+      box-shadow:var(--shadow);
+    }
+    .device:before{
+      content:"";position:absolute;z-index:5;top:9px;left:50%;width:72px;height:17px;
+      transform:translateX(-50%);border-radius:99px;background:var(--text);opacity:.88;pointer-events:none;
+    }
+    .screens{height:100%}
+    .screen{
+      display:none;height:100%;overflow-y:auto;overscroll-behavior:contain;
+      padding:42px 20px 28px;scrollbar-width:thin;scrollbar-color:var(--line) transparent;
+    }
+    .screen:target{display:block}
+    .screens:not(:has(.screen:target)) #welcome{display:block}
+    .app-header,.row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .app-header{margin:0 0 23px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:-.03em}
+    .brand-mark{display:grid;width:40px;height:40px;place-items:center;border-radius:14px;background:var(--navy);color:#fff;font-size:18px}
+    .brand-name{font-size:16px}.brand-name small{display:block;color:var(--muted);font-size:9px;letter-spacing:.11em}
+    .avatar{display:grid;width:42px;height:42px;place-items:center;border-radius:50%;background:var(--accent-soft);font-weight:800}
+    .eyebrow{margin:0 0 8px;color:var(--accent);font-size:11px;font-weight:850;letter-spacing:.1em;text-transform:uppercase}
+    h1,h2,h3,p{margin-top:0}
+    h1{margin-bottom:10px;font-size:clamp(29px,8vw,36px);line-height:1.1;letter-spacing:-.045em}
+    h2{margin-bottom:8px;font-size:22px;line-height:1.2;letter-spacing:-.03em}
+    h3{margin-bottom:6px;font-size:15px}
+    p{color:var(--muted)}.lead{margin-bottom:20px;font-size:15px}
+    .card{margin:13px 0;padding:17px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
+    .compact{padding:14px}
+    .hero{margin:0 0 15px;padding:22px 19px;border-radius:24px;background:var(--navy);color:#fff}
+    .hero h2,.hero h1{color:#fff}.hero p{color:#D6E1ED}.hero .eyebrow{color:var(--cyan)}
+    .badge{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:11px;font-weight:800;line-height:1.35}
+    .badge.warn{background:#FFF2D8;color:#76500E}.badge.good{background:#E2F5EB;color:#146641}
+    .button{
+      display:flex;min-height:50px;align-items:center;justify-content:center;gap:8px;margin:10px 0;
+      padding:12px 16px;border-radius:15px;background:var(--navy);color:#fff;font-weight:800;text-align:center;
+    }
+    .button.secondary{background:var(--accent-soft);color:var(--text)}
+    .button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+    .button-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .back{display:inline-flex;min-height:44px;align-items:center;margin:-6px 0 10px;color:var(--muted);font-size:13px;font-weight:750}
+    .divider{height:1px;margin:15px 0;background:var(--line)}
+    .small{font-size:12px}.tiny{font-size:10px}.muted{color:var(--muted)}
+    .callout{margin:12px 0;padding:13px;border-left:3px solid var(--info);border-radius:12px;background:var(--accent-soft)}
+    .callout p{margin:0;color:var(--text);font-size:12px}
+    .progress-track{height:8px;overflow:hidden;border-radius:99px;background:var(--surface-soft)}
+    .progress-track span{display:block;height:100%;border-radius:inherit;background:var(--cyan)}
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .stat{padding:13px;border-radius:15px;background:var(--surface-soft)}
+    .stat strong{display:block;font-size:21px;letter-spacing:-.04em}.stat span{color:var(--muted);font-size:11px}
+    .list-row{display:flex;min-height:58px;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+    .list-row:last-child{border-bottom:0}
+    .icon-tile{display:grid;flex:0 0 40px;width:40px;height:40px;place-items:center;border-radius:13px;background:var(--accent-soft);font-size:17px}
+    .list-copy{flex:1;min-width:0}.list-copy strong{display:block;font-size:13px}.list-copy span{display:block;color:var(--muted);font-size:11px}
+    .topic-line{display:grid;grid-template-columns:1fr auto;gap:7px;margin:14px 0}
+    .topic-line .progress-track{grid-column:1/-1}
+    .choice-list{display:grid;gap:8px;margin:13px 0}
+    .choice{position:relative}
+    .choice input{position:absolute;width:1px;height:1px;opacity:0}
+    .choice label{
+      display:flex;min-height:48px;align-items:center;gap:10px;padding:10px 12px;
+      border:1px solid var(--line);border-radius:13px;background:var(--surface);cursor:pointer;
+      font-size:13px;font-weight:650;
+    }
+    .choice label:before{content:"";flex:0 0 18px;width:18px;height:18px;border:2px solid var(--line);border-radius:50%}
+    .choice input:checked+label{border-color:var(--accent);background:var(--accent-soft)}
+    .choice input:checked+label:before{border:5px solid var(--accent)}
+    .choice input:focus-visible+label{outline:3px solid var(--cyan);outline-offset:2px}
+    .answer-letter{color:var(--accent);font-size:11px;font-weight:850}
+    .bottom-nav{
+      position:sticky;z-index:2;bottom:-1px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px;
+      margin:20px -6px 0;padding:7px 4px max(7px,env(safe-area-inset-bottom));
+      border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:var(--shadow);
+    }
+    .bottom-nav a{display:grid;min-height:44px;align-content:center;justify-items:center;border-radius:11px;color:var(--muted);font-size:9px;font-weight:750}
+    .bottom-nav a span{font-size:16px;line-height:1.2}
+    .bottom-nav a:hover,.bottom-nav a:focus-visible{background:var(--accent-soft);color:var(--accent)}
+    details{margin:10px 0;padding:12px 14px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+    summary{min-height:24px;cursor:pointer;font-size:13px;font-weight:750}
+    .field-label{display:block;margin:12px 0 5px;font-size:12px;font-weight:750}
+    .field{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);font:inherit}
+    textarea.field{min-height:100px;resize:vertical}
+    .device:after{content:"";position:absolute;z-index:6;bottom:8px;left:50%;width:104px;height:4px;transform:translateX(-50%);border-radius:99px;background:var(--text);opacity:.55;pointer-events:none}
+    @media(max-width:460px){
+      body{display:block;padding:0}
+      .device{width:100%;height:100vh;height:100dvh;min-height:560px;border:0;border-radius:0;box-shadow:none}
+      .device:before{top:7px}.screen{padding-top:35px}
+    }
+    @media(min-width:461px){.screen{padding-right:24px;padding-left:24px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+<main class="device" aria-label="ArivuVazhi student mobile app preview">
+<div class="screens">
+
+  <section class="screen" id="welcome" aria-labelledby="welcome-title">
+    <header class="app-header">
+      <div class="brand"><span class="brand-mark">அ</span><span class="brand-name">ArivuVazhi<small>LEARN • PRACTICE • ACHIEVE</small></span></div>
+      <span class="badge">Student preview</span>
+    </header>
+    <div class="hero">
+      <p class="eyebrow">A calmer way to prepare</p>
+      <h1 id="welcome-title">Your next step, made clear.</h1>
+      <p>Build understanding, practice with purpose, and see how you are progressing.</p>
+    </div>
+    <div class="card">
+      <h2>Less distraction. More concentration.</h2>
+      <p class="lead">Create a study routine around your goal and focus on one useful action at a time.</p>
+      <a class="button" href="#login">Get started →</a>
+      <a class="button secondary" href="#login">Login</a>
+      <p class="tiny muted">Clickable preview · Sample content only · Nothing is connected or saved</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat"><strong>Learn</strong><span>Explore your syllabus</span></div>
+      <div class="stat"><strong>Improve</strong><span>Practice and review</span></div>
+    </div>
+  </section>
+
+  <section class="screen" id="login" aria-labelledby="login-title">
+    <a class="back" href="#welcome">← Welcome</a>
+    <p class="eyebrow">Student account</p><h1 id="login-title">Welcome to your study space.</h1>
+    <p class="lead">Sign-in is shown for the journey preview only; no account service is connected.</p>
+    <div class="card">
+      <label class="field-label" for="email">Email or phone</label>
+      <input class="field" id="email" type="text" placeholder="Sample input only">
+      <label class="field-label" for="password">Password</label>
+      <input class="field" id="password" type="password" placeholder="Not submitted">
+      <p class="tiny muted">Please do not enter real personal information. Fields are not saved.</p>
+      <div class="callout"><p>Protected learner features, including AI Tutor, are intended for authenticated learners.</p></div>
+    </div>
+    <a class="button" href="#setup-language">Continue to setup →</a>
+  </section>
+
+  <section class="screen" id="setup-language" aria-labelledby="setup-language-title">
+    <a class="back" href="#login">← Back</a>
+    <p class="eyebrow">Setup · Language preferences</p><h1 id="setup-language-title">Choose your languages.</h1>
+    <p class="lead">App Language controls the interface. Exam/Study Language guides learning content and responses.</p>
+    <div class="card">
+      <h3>App Language</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="app-lang" id="app-en" checked><label for="app-en">English</label></div>
+        <div class="choice"><input type="radio" name="app-lang" id="app-ta"><label for="app-ta">தமிழ் (Tamil)</label></div>
+      </div>
+      <div class="divider"></div>
+      <h3>Exam/Study Language</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="study-lang" id="study-en" checked><label for="study-en">English</label></div>
+        <div class="choice"><input type="radio" name="study-lang" id="study-ta"><label for="study-ta">தமிழ் (Tamil)</label></div>
+      </div>
+      <div class="callout"><p>Content and factual Tutor answers depend on approved material being available in the selected study language. This preview does not establish availability.</p></div>
+    </div>
+    <a class="button" href="#setup-program">Choose an active program →</a>
+  </section>
+
+  <section class="screen" id="setup-program" aria-labelledby="setup-program-title">
+    <a class="back" href="#setup-language">← Back</a>
+    <p class="eyebrow">Setup · Active exam</p><h1 id="setup-program-title">What are you preparing for?</h1>
+    <p class="lead">Each learner has one active program. Programs are introduced incrementally when configured.</p>
+    <div class="card">
+      <h3>Sample program choice</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="program" id="group4" checked><label for="group4">TNPSC Group IV <span class="badge warn">Illustrative</span></label></div>
+        <div class="choice"><input type="radio" name="program" id="other-program"><label for="other-program">Other supported program <span class="badge warn">Not specified</span></label></div>
+      </div>
+      <p class="tiny muted">Illustrative only. A program must have a configured syllabus, approved content, and exam rules before it is offered.</p>
+      <div class="divider"></div>
+      <h3>Set your goal</h3>
+      <label class="field-label" for="target-date">Target date (sample)</label>
+      <input class="field" id="target-date" type="date" value="2026-12-15">
+      <label class="field-label" for="availability">Study availability (sample)</label>
+      <select class="field" id="availability"><option>1 hour a day · 5 days a week</option><option>30 minutes a day · 5 days a week</option><option>Choose another schedule</option></select>
+      <div class="callout"><p>The selected program alone scopes learning, plans, practice, mocks, progress, revision, and Tutor context. Inactive-program progress retention is undecided.</p></div>
+    </div>
+    <a class="button" href="#assessment">Continue to initial assessment →</a>
+  </section>
+
+  <section class="screen" id="assessment" aria-labelledby="assessment-title">
+    <a class="back" href="#setup-program">← Setup</a>
+    <p class="eyebrow">Initial assessment · Sample</p>
+    <div class="row"><h1 id="assessment-title">Find your starting point.</h1><span class="badge">1 of 5</span></div>
+    <div class="progress-track"><span style="width:20%"></span></div>
+    <div class="card">
+      <span class="badge warn">Demo question</span>
+      <h2>What number comes next?</h2><p class="lead">2, 4, 8, 16, ___</p>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="baseline" id="base-a"><label for="base-a">24</label></div>
+        <div class="choice"><input type="radio" name="baseline" id="base-b"><label for="base-b">32</label></div>
+        <div class="choice"><input type="radio" name="baseline" id="base-c"><label for="base-c">30</label></div>
+        <div class="choice"><input type="radio" name="baseline" id="base-d"><label for="base-d">18</label></div>
+      </div>
+      <p class="tiny muted">Illustrative sample, not an official exam question.</p>
+    </div>
+    <a class="button" href="#learning-profile">Continue to sample learning profile →</a>
+  </section>
+
+  <section class="screen" id="learning-profile" aria-labelledby="learning-profile-title">
+    <a class="back" href="#assessment">← Assessment</a>
+    <p class="eyebrow">Learning profile · Sample</p><h1 id="learning-profile-title">A place to begin.</h1>
+    <p class="lead">A starting snapshot for planning—not a prediction of exam success.</p>
+    <div class="card">
+      <h3>Sample topic snapshot</h3>
+      <div class="topic-line"><strong>Number patterns</strong><span class="small">4 / 5</span><div class="progress-track"><span style="width:80%"></span></div></div>
+      <div class="topic-line"><strong>Reading comprehension</strong><span class="small">3 / 5</span><div class="progress-track"><span style="width:60%"></span></div></div>
+      <div class="topic-line"><strong>General awareness</strong><span class="small">2 / 5</span><div class="progress-track"><span style="width:40%"></span></div></div>
+      <p class="tiny muted">Sample topics and data; approved content availability is not implied.</p>
+    </div>
+    <a class="button" href="#starter-plan">View a sample plan →</a>
+  </section>
+
+  <section class="screen" id="starter-plan" aria-labelledby="starter-plan-title">
+    <a class="back" href="#learning-profile">← Profile</a>
+    <p class="eyebrow">Personalized plan · Sample</p><h1 id="starter-plan-title">A clear next step, each day.</h1>
+    <p class="lead">An example plan for the selected active-program context.</p>
+    <div class="card">
+      <div class="row"><h3>Today · Sample schedule</h3><span class="badge">3 activities</span></div>
+      <div class="list-row"><span class="icon-tile">01</span><div class="list-copy"><strong>Learn: number patterns</strong><span>Build the basics · sample task</span></div></div>
+      <div class="list-row"><span class="icon-tile">02</span><div class="list-copy"><strong>Practice: reasoning</strong><span>Selected difficulty · sample task</span></div></div>
+      <div class="list-row"><span class="icon-tile">03</span><div class="list-copy"><strong>Review saved mistakes</strong><span>Sample revision task</span></div></div>
+    </div>
+    <div class="callout"><p>Plans and recommendations must use only the learner’s current active program and configured content.</p></div>
+    <a class="button" href="#home">Go to Home →</a>
+  </section>
+
+  <section class="screen" id="home" aria-labelledby="home-title">
+    <header class="app-header">
+      <div class="brand"><span class="brand-mark">அ</span><span class="brand-name">ArivuVazhi<small>YOUR STUDY SPACE</small></span></div>
+      <a class="avatar" href="#profile" aria-label="Open Profile">S</a>
+    </header>
+    <p class="eyebrow">Home · Active-program sample</p><h1 id="home-title">Good morning, learner.</h1>
+    <div class="card compact">
+      <div class="row"><div><strong>Active program</strong><div class="small muted">TNPSC Group IV · illustrative</div></div><a class="badge" href="#settings">Change</a></div>
+      <div class="small muted">Study language: English · sample preference</div>
+    </div>
+    <div class="hero">
+      <p class="eyebrow">Your preparation</p><div class="row"><h2>Keep building steadily</h2><strong>18%</strong></div>
+      <div class="progress-track"><span style="width:18%"></span></div>
+      <p>Sample preparation progress for this active-program view.</p>
+    </div>
+    <div class="card">
+      <div class="row"><h3>Today’s next step</h3><span class="badge">Sample plan</span></div>
+      <div class="list-row"><span class="icon-tile">↗</span><div class="list-copy"><strong>Continue: number patterns</strong><span>Learning · sample activity</span></div></div>
+      <a class="button" href="#learn">Continue learning →</a>
+    </div>
+    <div class="card compact">
+      <h3>Study tools</h3>
+      <div class="button-row"><a class="button secondary" href="#practice-setup">Practice</a><a class="button secondary" href="#mock-hub">Mock tests</a></div>
+      <div class="button-row"><a class="button ghost" href="#tutor">AI Tutor</a><a class="button ghost" href="#planner">Study Planner</a></div>
+    </div>
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#home" aria-current="page"><span>⌂</span>Home</a><a href="#learn"><span>▤</span>Learn</a>
+      <a href="#practice-setup"><span>✎</span>Practice</a><a href="#progress"><span>◔</span>Progress</a>
+      <a href="#profile"><span>◉</span>Profile</a>
+    </nav>
+  </section>
+
+  <section class="screen" id="learn" aria-labelledby="learn-title">
+    <header class="app-header"><a class="back" href="#home">← Home</a><span class="badge">Active program</span></header>
+    <p class="eyebrow">Learn · TNPSC Group IV sample</p><h1 id="learn-title">Explore your syllabus.</h1>
+    <p class="lead">Browse sample subjects and topics. Materials shown here are illustrative, not confirmed approved content.</p>
+    <div class="card">
+      <div class="row"><h3>Reasoning</h3><span class="badge">2 of 5 topics</span></div>
+      <div class="list-row"><span class="icon-tile">✓</span><div class="list-copy"><strong>Number patterns</strong><span>Sample topic · In progress</span></div><a href="#study-material">Open →</a></div>
+      <div class="list-row"><span class="icon-tile">○</span><div class="list-copy"><strong>Logical sequences</strong><span>Pending · sample outline</span></div><a href="#study-material">Open →</a></div>
+      <div class="list-row"><span class="icon-tile">○</span><div class="list-copy"><strong>Basic quantitative reasoning</strong><span>Pending · sample outline</span></div><a href="#study-material">Open →</a></div>
+    </div>
+    <div class="card">
+      <div class="row"><h3>Language and comprehension</h3><span class="badge">Sample outline</span></div>
+      <div class="list-row"><span class="icon-tile">文</span><div class="list-copy"><strong>Reading comprehension</strong><span>Topic status not confirmed</span></div><a href="#study-material">Open →</a></div>
+    </div>
+    <details><summary>Notes and bookmarks</summary><p class="small">A connected app may provide notes and bookmarks for available learning materials. This preview does not save anything.</p></details>
+    <div class="callout"><p>Show only syllabus items, resources, and languages approved for the active program. Video availability is not established in this sample.</p></div>
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#home"><span>⌂</span>Home</a><a href="#learn"><span>▤</span>Learn</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#progress"><span>◔</span>Progress</a><a href="#profile"><span>◉</span>Profile</a>
+    </nav>
+  </section>
+
+  <section class="screen" id="study-material" aria-labelledby="material-title">
+    <a class="back" href="#learn">← Syllabus</a>
+    <p class="eyebrow">Learning material · Demo</p><h1 id="material-title">Number patterns</h1>
+    <div class="card">
+      <span class="badge warn">Illustrative material</span>
+      <h2>Look for a repeating rule.</h2>
+      <p>In a sequence, compare neighboring numbers to look for a consistent change. A rule may use addition, subtraction, multiplication, or another pattern.</p>
+      <details><summary>Sample note</summary><p class="small">Check the relationship between consecutive terms before choosing an answer. This note is not an approved exam resource.</p></details>
+      <div class="button-row"><a class="button secondary" href="#learn">Save note</a><a class="button" href="#practice-setup">Practice topic</a></div>
+    </div>
+    <div class="callout"><p>This sample does not establish that this material is available in a particular language or program.</p></div>
+  </section>
+
+  <section class="screen" id="practice-setup" aria-labelledby="practice-setup-title">
+    <a class="back" href="#home">← Home</a>
+    <p class="eyebrow">Practice · Active-program sample</p><h1 id="practice-setup-title">Set up a focused session.</h1>
+    <div class="card">
+      <h3>Choose a topic</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="topic" id="topic-pattern" checked><label for="topic-pattern">Number patterns <span class="badge warn">Demo</span></label></div>
+        <div class="choice"><input type="radio" name="topic" id="topic-reading"><label for="topic-reading">Reading comprehension</label></div>
+        <div class="choice"><input type="radio" name="topic" id="topic-awareness"><label for="topic-awareness">General awareness</label></div>
+      </div>
+      <div class="divider"></div><h3>Choose difficulty</h3>
+      <p class="small">The selected difficulty should guide question selection.</p>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="difficulty" id="easy"><label for="easy">Easy</label></div>
+        <div class="choice"><input type="radio" name="difficulty" id="medium" checked><label for="medium">Medium</label></div>
+        <div class="choice"><input type="radio" name="difficulty" id="hard"><label for="hard">Hard</label></div>
+        <div class="choice"><input type="radio" name="difficulty" id="very-hard"><label for="very-hard">Very Hard</label></div>
+      </div>
+      <p class="tiny muted">Question count and topic availability are sample-only. Practice must follow active-program configuration.</p>
+    </div>
+    <a class="button" href="#practice-question">Start sample practice →</a>
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#home"><span>⌂</span>Home</a><a href="#learn"><span>▤</span>Learn</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#progress"><span>◔</span>Progress</a><a href="#profile"><span>◉</span>Profile</a>
+    </nav>
+  </section>
+
+  <section class="screen" id="practice-question" aria-labelledby="practice-title">
+    <a class="back" href="#practice-setup">← Practice setup</a>
+    <p class="eyebrow">Number patterns · Medium · Sample</p>
+    <div class="row"><h1 id="practice-title">Try this question.</h1><span class="badge">1 of sample set</span></div>
+    <div class="progress-track"><span style="width:25%"></span></div>
+    <div class="card">
+      <span class="badge warn">Demo question</span><h2>What number completes the pattern?</h2>
+      <p class="lead">3, 6, 12, 24, ___</p>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="practice-answer" id="pa"><label for="pa"><span class="answer-letter">A</span>36</label></div>
+        <div class="choice"><input type="radio" name="practice-answer" id="pb"><label for="pb"><span class="answer-letter">B</span>42</label></div>
+        <div class="choice"><input type="radio" name="practice-answer" id="pc"><label for="pc"><span class="answer-letter">C</span>48</label></div>
+        <div class="choice"><input type="radio" name="practice-answer" id="pd"><label for="pd"><span class="answer-letter">D</span>30</label></div>
+      </div>
+      <details><summary>Question options</summary><p class="small">Bookmarking or reporting may be available in a connected product. No action is saved here.</p></details>
+      <p class="tiny muted">Sample content, not an official exam question.</p>
+    </div>
+    <div class="button-row"><a class="button secondary" href="#practice-setup">Exit set</a><a class="button" href="#practice-feedback">Check answer →</a></div>
+  </section>
+
+  <section class="screen" id="practice-feedback" aria-labelledby="feedback-practice-title">
+    <a class="back" href="#practice-question">← Question</a>
+    <p class="eyebrow">Immediate feedback · Sample</p>
+    <div class="hero"><span class="badge good">Correct answer: C · 48</span><h2 id="feedback-practice-title">Spot the repeating rule.</h2><p>Each number is multiplied by 2 to get the next number.</p></div>
+    <div class="card">
+      <h3>Explanation</h3>
+      <p>3 × 2 = 6, 6 × 2 = 12, and 12 × 2 = 24. Continue the same rule: 24 × 2 = <strong>48</strong>.</p>
+      <div class="divider"></div><div class="row"><span class="small muted">Topic result</span><strong>Sample feedback</strong></div>
+    </div>
+    <div class="button-row"><a class="button secondary" href="#mistakes">Review mistakes</a><a class="button" href="#practice-question">Next question →</a></div>
+    <a class="button ghost" href="#tutor">Ask AI Tutor about this</a>
+  </section>
+
+  <section class="screen" id="mistakes" aria-labelledby="mistakes-title">
+    <a class="back" href="#home">← Home</a>
+    <p class="eyebrow">Mistake book · Sample</p><h1 id="mistakes-title">Review what needs another look.</h1>
+    <p class="lead">A sample list of saved questions and explanations within the active-program view.</p>
+    <div class="card">
+      <div class="list-row"><span class="icon-tile">↗</span><div class="list-copy"><strong>Number patterns</strong><span>Sample saved item · Review rule</span></div><a href="#study-material">Open →</a></div>
+      <div class="list-row"><span class="icon-tile">文</span><div class="list-copy"><strong>Reading comprehension</strong><span>Sample saved item · Check evidence</span></div><a href="#study-material">Open →</a></div>
+      <div class="list-row"><span class="icon-tile">◎</span><div class="list-copy"><strong>General awareness</strong><span>Sample saved item · Revisit concept</span></div><a href="#study-material">Open →</a></div>
+    </div>
+    <a class="button" href="#revision">Open revision queue →</a>
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#home"><span>⌂</span>Home</a><a href="#learn"><span>▤</span>Learn</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#progress"><span>◔</span>Progress</a><a href="#profile"><span>◉</span>Profile</a>
+    </nav>
+  </section>
+
+  <section class="screen" id="revision" aria-labelledby="revision-title">
+    <a class="back" href="#home">← Home</a>
+    <p class="eyebrow">Revision · Sample queue</p><h1 id="revision-title">A few ideas to revisit.</h1>
+    <div class="card">
+      <div class="row"><h3>Suggested review</h3><span class="badge">Illustrative</span></div>
+      <div class="list-row"><span class="icon-tile">1</span><div class="list-copy"><strong>Number patterns</strong><span>Review the doubling rule</span></div></div>
+      <div class="list-row"><span class="icon-tile">2</span><div class="list-copy"><strong>Reading comprehension</strong><span>Find evidence in a passage</span></div></div>
+      <div class="list-row"><span class="icon-tile">3</span><div class="list-copy"><strong>General awareness</strong><span>Revisit a saved concept</span></div></div>
+    </div>
+    <div class="callout"><p>Scheduling behavior and reminders depend on product configuration. These entries are sample tasks, not a configured schedule.</p></div>
+    <div class="button-row"><a class="button secondary" href="#mistakes">Mistake book</a><a class="button" href="#practice-setup">Practice now</a></div>
+  </section>
+
+  <section class="screen" id="mock-hub" aria-labelledby="mock-hub-title">
+    <a class="back" href="#home">← Home</a>
+    <p class="eyebrow">Mock tests · Active-program sample</p><h1 id="mock-hub-title">Choose your kind of practice.</h1>
+    <p class="lead">Full exam mocks and focused subject/topic mocks have different purposes.</p>
+    <div class="card">
+      <span class="badge">Focused practice</span><h2>Subject or topic mock</h2>
+      <p>Practice a selected subject or topic. This is not a full real-exam simulation.</p>
+      <a class="button secondary" href="#focused-setup">Set up focused practice →</a>
+    </div>
+    <div class="card">
+      <span class="badge">Full exam mock</span><h2>Full-length exam mock</h2>
+      <p>Uses the active program’s configured exam rules, including timing, marks, question pattern, scoring, and applicable negative marking.</p>
+      <a class="button" href="#full-instructions">View instructions →</a>
+    </div>
+    <p class="tiny muted">Availability and configuration depend on the active program. No mock rules are established by this preview.</p>
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#home"><span>⌂</span>Home</a><a href="#learn"><span>▤</span>Learn</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#progress"><span>◔</span>Progress</a><a href="#profile"><span>◉</span>Profile</a>
+    </nav>
+  </section>
+
+  <section class="screen" id="focused-setup" aria-labelledby="focused-setup-title">
+    <a class="back" href="#mock-hub">← Mock types</a>
+    <p class="eyebrow">Focused mock · Sample setup</p><h1 id="focused-setup-title">Choose a focus.</h1>
+    <div class="card">
+      <h3>Practice type</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="mock-type" id="subject-wise" checked><label for="subject-wise">Subject-wise</label></div>
+        <div class="choice"><input type="radio" name="mock-type" id="topic-wise"><label for="topic-wise">Topic-wise</label></div>
+      </div>
+      <h3>Sample focus</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="mock-focus" id="reasoning" checked><label for="reasoning">Reasoning</label></div>
+        <div class="choice"><input type="radio" name="mock-focus" id="patterns"><label for="patterns">Number patterns</label></div>
+        <div class="choice"><input type="radio" name="mock-focus" id="comprehension"><label for="comprehension">Reading comprehension</label></div>
+      </div>
+      <div class="callout"><p>Focused mocks are for active-program practice. Exact counts, duration, and other settings are not specified here.</p></div>
+    </div>
+    <a class="button" href="#focused-question">Start sample focused mock →</a>
+  </section>
+
+  <section class="screen" id="focused-question" aria-labelledby="focused-question-title">
+    <a class="back" href="#focused-setup">← Focus setup</a>
+    <p class="eyebrow">Focused mock · Sample</p><div class="row"><h1 id="focused-question-title">Question 1</h1><span class="badge warn">Static</span></div>
+    <div class="progress-track"><span style="width:35%"></span></div>
+    <div class="card">
+      <span class="badge">Number patterns · Demo</span><h2>Which number continues the sequence?</h2><p class="lead">5, 10, 20, 40, ___</p>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="focused-answer" id="fa"><label for="fa">60</label></div>
+        <div class="choice"><input type="radio" name="focused-answer" id="fb"><label for="fb">70</label></div>
+        <div class="choice"><input type="radio" name="focused-answer" id="fc"><label for="fc">80</label></div>
+        <div class="choice"><input type="radio" name="focused-answer" id="fd"><label for="fd">90</label></div>
+      </div>
+      <p class="tiny muted">No timer is running. Sample question and controls only.</p>
+    </div>
+    <div class="button-row"><a class="button secondary" href="#mock-hub">Exit</a><a class="button" href="#focused-result">Submit sample →</a></div>
+  </section>
+
+  <section class="screen" id="focused-result" aria-labelledby="focused-result-title">
+    <a class="back" href="#mock-hub">← Mock options</a>
+    <p class="eyebrow">Focused mock · Sample result</p><h1 id="focused-result-title">Topic snapshot.</h1>
+    <div class="hero"><span class="badge">Illustrative</span><h2>4 / 5</h2><p>Sample result, not an exam outcome prediction.</p></div>
+    <div class="card"><h3>Number patterns · sample</h3><div class="topic-line"><strong>Correct</strong><span class="small">4</span><div class="progress-track"><span style="width:80%"></span></div></div><p class="small">Actual result and scoring rules depend on active-program configuration.</p></div>
+    <div class="button-row"><a class="button secondary" href="#revision">Review topic</a><a class="button" href="#practice-setup">Practice again</a></div>
+  </section>
+
+  <section class="screen" id="full-instructions" aria-labelledby="full-instructions-title">
+    <a class="back" href="#mock-hub">← Mock types</a>
+    <p class="eyebrow">Full mock · Instructions</p><h1 id="full-instructions-title">Before you begin.</h1>
+    <p class="lead">A full mock should follow the active program’s configured real-exam rules.</p>
+    <div class="card">
+      <div class="list-row"><span class="icon-tile">◷</span><div class="list-copy"><strong>Timing</strong><span>Configured for the active program</span></div></div>
+      <div class="list-row"><span class="icon-tile">◎</span><div class="list-copy"><strong>Marks and scoring</strong><span>Configured rules; computed deterministically</span></div></div>
+      <div class="list-row"><span class="icon-tile">▤</span><div class="list-copy"><strong>Question pattern</strong><span>Configured pattern and distribution</span></div></div>
+      <div class="list-row"><span class="icon-tile">−</span><div class="list-copy"><strong>Negative marking</strong><span>Applied only where configured</span></div></div>
+      <div class="callout"><p>This sample does not specify a duration, count, marks, or penalty. A live full mock must use approved active-program settings.</p></div>
+    </div>
+    <a class="button" href="#full-mock">Start illustrative full mock →</a>
+  </section>
+
+  <section class="screen" id="full-mock" aria-labelledby="full-mock-title">
+    <p class="eyebrow">Full mock · Focused exam view</p>
+    <div class="row"><h1 id="full-mock-title">Question 1</h1><span class="badge warn">Timer demo</span></div>
+    <div class="card compact"><div class="row"><span class="small">Sample question navigation</span><span class="small muted">1 of sample</span></div><div class="button-row"><a class="button secondary" href="#full-mock">1</a><a class="button ghost" href="#full-mock">2</a></div></div>
+    <div class="progress-track"><span style="width:12%"></span></div>
+    <div class="card">
+      <span class="badge">Sample section</span>
+      <h2>A book costs ₹80 after a 20% discount. What was its original price?</h2>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="full-answer" id="full-a"><label for="full-a">₹96</label></div>
+        <div class="choice"><input type="radio" name="full-answer" id="full-b"><label for="full-b">₹100</label></div>
+        <div class="choice"><input type="radio" name="full-answer" id="full-c"><label for="full-c">₹104</label></div>
+        <div class="choice"><input type="radio" name="full-answer" id="full-d"><label for="full-d">₹120</label></div>
+      </div>
+      <a class="button secondary" href="#full-mock">Mark for review</a>
+      <p class="tiny muted">Static illustration: no timer, answer persistence, or exam is running.</p>
+    </div>
+    <div class="button-row"><a class="button secondary" href="#full-instructions">Exit mock</a><a class="button" href="#submit-confirm">Submit mock →</a></div>
+  </section>
+
+  <section class="screen" id="submit-confirm" aria-labelledby="submit-title">
+    <a class="back" href="#full-mock">← Return to mock</a>
+    <p class="eyebrow">Submission confirmation</p><h1 id="submit-title">Ready to submit?</h1>
+    <div class="card">
+      <p>This is a preview confirmation for the sample full mock. In a connected exam, confirm before ending an in-progress attempt.</p>
+      <div class="button-row"><a class="button secondary" href="#full-mock">Keep reviewing</a><a class="button" href="#mock-result">Submit sample</a></div>
+    </div>
+    <p class="tiny muted">No attempt is active and no result is calculated by this prototype.</p>
+  </section>
+
+  <section class="screen" id="mock-result" aria-labelledby="mock-result-title">
+    <a class="back" href="#home">← Home</a>
+    <p class="eyebrow">Mock result · Sample analysis</p><h1 id="mock-result-title">A snapshot of this example.</h1>
+    <div class="hero"><span class="badge">Illustrative result</span><h2>7 / 10</h2><p>Practice snapshot only—not a prediction of exam success.</p></div>
+    <div class="stat-grid">
+      <div class="stat"><strong>7</strong><span>Correct · sample</span></div><div class="stat"><strong>2</strong><span>Wrong · sample</span></div>
+      <div class="stat"><strong>1</strong><span>Unanswered · sample</span></div><div class="stat"><strong>70%</strong><span>Accuracy · sample</span></div>
+    </div>
+    <div class="card">
+      <h3>Performance by topic · Sample</h3>
+      <div class="topic-line"><strong>Reasoning</strong><span class="small">80%</span><div class="progress-track"><span style="width:80%"></span></div></div>
+      <div class="topic-line"><strong>Comprehension</strong><span class="small">60%</span><div class="progress-track"><span style="width:60%"></span></div></div>
+      <p class="small">Further insights appear when relevant data exists.</p>
+    </div>
+    <a class="button" href="#mock-analysis">View next-step ideas →</a>
+  </section>
+
+  <section class="screen" id="mock-analysis" aria-labelledby="mock-analysis-title">
+    <a class="back" href="#mock-result">← Results</a>
+    <p class="eyebrow">Performance insights · Sample</p><h1 id="mock-analysis-title">Choose a useful next step.</h1>
+    <div class="card">
+      <span class="badge">Example interpretation</span><h2>Review quantitative basics.</h2>
+      <p>This sample shows an opportunity to practice percentage questions. A connected product may show recurring mistakes and time-management insights when data exists.</p>
+      <div class="callout"><p>The backend calculates scoring and deterministic metrics. AI may explain those results but must not replace calculations or guarantee success.</p></div>
+    </div>
+    <div class="card">
+      <h3>Suggested sample actions</h3>
+      <div class="list-row"><span class="icon-tile">％</span><div class="list-copy"><strong>Practice percentages</strong><span>Sample recommendation</span></div></div>
+      <div class="list-row"><span class="icon-tile">↻</span><div class="list-copy"><strong>Review saved mistakes</strong><span>Sample revision action</span></div></div>
+    </div>
+    <div class="button-row"><a class="button secondary" href="#revision">Revise</a><a class="button" href="#practice-setup">Practice</a></div>
+  </section>
+
+  <section class="screen" id="tutor" aria-labelledby="tutor-title">
+    <a class="back" href="#home">← Home</a>
+    <p class="eyebrow">AI Tutor · Exam preparation</p><h1 id="tutor-title">Ask about your learning.</h1>
+    <p class="lead">An example of a readable, focused explanation. This is not a live assistant.</p>
+    <div class="card">
+      <span class="badge">Sample conversation</span>
+      <div class="callout"><p><strong>You</strong><br>Why is the answer to the pattern question 48?</p></div>
+      <div class="card compact">
+        <span class="badge">Tutor response · Demo</span>
+        <p>The pattern doubles each time: 3 becomes 6, 6 becomes 12, and 12 becomes 24. Doubling 24 gives <strong>48</strong>.</p>
+        <p class="tiny muted">Sample explanation; not grounded in an approved source.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Explore a sample prompt</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="tutor-prompt" id="tutor-a" checked><label for="tutor-a">Explain a practice answer</label></div>
+        <div class="choice"><input type="radio" name="tutor-prompt" id="tutor-b"><label for="tutor-b">Help understand a mistake</label></div>
+        <div class="choice"><input type="radio" name="tutor-prompt" id="tutor-c"><label for="tutor-c">Plan a study session</label></div>
+      </div>
+      <div class="callout"><p>A connected Tutor requires authentication, uses only authorized context for the active program, and grounds factual answers in approved knowledge. It should state when supporting knowledge is unavailable.</p></div>
+    </div>
+    <div class="card compact"><h3>Language availability</h3><p class="small">Tamil or English support depends on approved knowledge and the selected Exam/Study Language. Availability is not confirmed by this sample.</p></div>
+  </section>
+
+  <section class="screen" id="planner" aria-labelledby="planner-title">
+    <a class="back" href="#home">← Home</a>
+    <p class="eyebrow">Study Planner · Active-program sample</p><h1 id="planner-title">A plan for this week.</h1>
+    <p class="lead">A simple sample view of goals and study tasks.</p>
+    <div class="card">
+      <div class="row"><h3>Today</h3><span class="badge">Sample schedule</span></div>
+      <div class="list-row"><span class="icon-tile">○</span><div class="list-copy"><strong>Learn: number patterns</strong><span>Reasoning · sample task</span></div><span class="badge">To do</span></div>
+      <div class="list-row"><span class="icon-tile">✓</span><div class="list-copy"><strong>Practice a topic</strong><span>Sample completion status</span></div><span class="badge good">Done</span></div>
+      <div class="list-row"><span class="icon-tile">○</span><div class="list-copy"><strong>Review saved mistakes</strong><span>Revision · sample task</span></div><a href="#revision">Open →</a></div>
+    </div>
+    <div class="card">
+      <h3>Weekly view</h3>
+      <div class="list-row"><span class="icon-tile">M</span><div class="list-copy"><strong>Monday</strong><span>Learn and practice · sample</span></div></div>
+      <div class="list-row"><span class="icon-tile">T</span><div class="list-copy"><strong>Tuesday</strong><span>Revision · sample</span></div></div>
+      <div class="list-row"><span class="icon-tile">W</span><div class="list-copy"><strong>Wednesday</strong><span>Practice · sample</span></div></div>
+    </div>
+    <div class="callout"><p>Planner scheduling, reminders, completion, and AI-assisted planning depend on product configuration. All tasks should remain scoped to the active program.</p></div>
+    <a class="button" href="#practice-setup">Start a task →</a>
+  </section>
+
+  <section class="screen" id="progress" aria-labelledby="progress-title">
+    <header class="app-header"><a class="back" href="#home">← Home</a><span class="badge">Active program</span></header>
+    <p class="eyebrow">Progress · Sample insights</p><h1 id="progress-title">See how your preparation is moving.</h1>
+    <p class="lead">A few understandable indicators, scoped to the current active-program sample.</p>
+    <div class="hero"><p class="eyebrow">Overall preparation</p><div class="row"><h2>Building a foundation</h2><strong>18%</strong></div><div class="progress-track"><span style="width:18%"></span></div><p>Illustrative progress only.</p></div>
+    <div class="card">
+      <h3>Topic snapshot</h3>
+      <div class="topic-line"><strong>Reasoning</strong><span class="small">72% · sample</span><div class="progress-track"><span style="width:72%"></span></div></div>
+      <div class="topic-line"><strong>Comprehension</strong><span class="small">58% · sample</span><div class="progress-track"><span style="width:58%"></span></div></div>
+      <div class="topic-line"><strong>General awareness</strong><span class="small">Needs practice · sample</span><div class="progress-track"><span style="width:42%"></span></div></div>
+    </div>
+    <div class="card">
+      <h3>Recent activity</h3>
+      <div class="list-row"><span class="icon-tile">✓</span><div class="list-copy"><strong>Practice session</strong><span>Number patterns · sample</span></div></div>
+      <div class="list-row"><span class="icon-tile">▤</span><div class="list-copy"><strong>Focused mock</strong><span>Reasoning · sample</span></div></div>
+    </div>
+    <div class="callout"><p>Insights, accuracy, trends, and recommendations should appear when relevant data exists. Scores and deterministic metrics are calculated by backend logic.</p></div>
+    <a class="button" href="#practice-setup">Practice a topic →</a>
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#home"><span>⌂</span>Home</a><a href="#learn"><span>▤</span>Learn</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#progress"><span>◔</span>Progress</a><a href="#profile"><span>◉</span>Profile</a>
+    </nav>
+  </section>
+
+  <section class="screen" id="profile" aria-labelledby="profile-title">
+    <header class="app-header"><a class="back" href="#home">← Home</a><span class="avatar">S</span></header>
+    <p class="eyebrow">Profile</p><h1 id="profile-title">Your account and support.</h1>
+    <div class="card">
+      <div class="row"><div><strong>Sample learner</strong><div class="small muted">Student account preview</div></div><span class="badge">Profile</span></div>
+    </div>
+    <div class="card">
+      <a class="list-row" href="#settings"><span class="icon-tile">⚙</span><div class="list-copy"><strong>Settings and preferences</strong><span>Language, theme, notifications</span></div><span>→</span></a>
+      <a class="list-row" href="#program-switch"><span class="icon-tile">◎</span><div class="list-copy"><strong>Active exam program</strong><span>Switch supported program</span></div><span>→</span></a>
+      <a class="list-row" href="#feedback"><span class="icon-tile">♡</span><div class="list-copy"><strong>Student feedback</strong><span>Optional · easy to find</span></div><span>→</span></a>
+      <a class="list-row" href="#help"><span class="icon-tile">?</span><div class="list-copy"><strong>Help and support</strong><span>Sample help information</span></div><span>→</span></a>
+    </div>
+    <nav class="bottom-nav" aria-label="Primary navigation">
+      <a href="#home"><span>⌂</span>Home</a><a href="#learn"><span>▤</span>Learn</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#progress"><span>◔</span>Progress</a><a href="#profile"><span>◉</span>Profile</a>
+    </nav>
+  </section>
+
+  <section class="screen" id="settings" aria-labelledby="settings-title">
+    <a class="back" href="#profile">← Profile</a>
+    <p class="eyebrow">Settings · Sample preferences</p><h1 id="settings-title">Make the app yours.</h1>
+    <div class="card">
+      <h3>App Language</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="settings-app-lang" id="settings-en" checked><label for="settings-en">English</label></div>
+        <div class="choice"><input type="radio" name="settings-app-lang" id="settings-ta"><label for="settings-ta">தமிழ் (Tamil)</label></div>
+      </div>
+      <div class="divider"></div><h3>Exam/Study Language</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="settings-study-lang" id="settings-study-en" checked><label for="settings-study-en">English</label></div>
+        <div class="choice"><input type="radio" name="settings-study-lang" id="settings-study-ta"><label for="settings-study-ta">தமிழ் (Tamil)</label></div>
+      </div>
+      <p class="tiny muted">These choices do not establish content availability.</p>
+    </div>
+    <div class="card">
+      <h3>Theme</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="theme" id="theme-light" checked><label for="theme-light">Light · default</label></div>
+        <div class="choice"><input type="radio" name="theme" id="theme-dark"><label for="theme-dark">Dark · optional preference</label></div>
+      </div>
+      <p class="small">The preview follows your device’s color-scheme preference.</p>
+    </div>
+    <div class="card">
+      <h3>Notifications</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="notifications" id="notify-on" checked><label for="notify-on">Reminders enabled · sample</label></div>
+        <div class="choice"><input type="radio" name="notifications" id="notify-off"><label for="notify-off">Reminders off</label></div>
+      </div>
+    </div>
+    <a class="button" href="#program-switch">Switch active program →</a>
+    <a class="button secondary" href="#feedback">Student feedback</a>
+  </section>
+
+  <section class="screen" id="program-switch" aria-labelledby="program-switch-title">
+    <a class="back" href="#settings">← Settings</a>
+    <p class="eyebrow">Active program · Sample switch</p><h1 id="program-switch-title">Choose one active program.</h1>
+    <p class="lead">Switching replaces the prior program as the context for learner-facing features.</p>
+    <div class="card">
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="switch-program" id="switch-current" checked><label for="switch-current">TNPSC Group IV <span class="badge warn">Current sample</span></label></div>
+        <div class="choice"><input type="radio" name="switch-program" id="switch-other"><label for="switch-other">Another supported program <span class="badge warn">Not specified</span></label></div>
+      </div>
+      <div class="callout"><p>Only supported, configured programs should be offered. Whether inactive-program progress is retained is undecided; this preview defines no retention behavior.</p></div>
+    </div>
+    <a class="button" href="#home">Preview active-program Home →</a>
+  </section>
+
+  <section class="screen" id="feedback" aria-labelledby="feedback-title">
+    <a class="back" href="#profile">← Profile</a>
+    <p class="eyebrow">Student feedback · Optional</p><h1 id="feedback-title">Help us improve.</h1>
+    <p class="lead">Share feedback about the app, content, explanations, or a suggestion.</p>
+    <div class="card">
+      <h3>What is your feedback about?</h3>
+      <div class="choice-list">
+        <div class="choice"><input type="radio" name="feedback-type" id="feedback-app" checked><label for="feedback-app">The app experience</label></div>
+        <div class="choice"><input type="radio" name="feedback-type" id="feedback-content"><label for="feedback-content">Learning content</label></div>
+        <div class="choice"><input type="radio" name="feedback-type" id="feedback-explanation"><label for="feedback-explanation">An explanation</label></div>
+        <div class="choice"><input type="radio" name="feedback-type" id="feedback-suggestion"><label for="feedback-suggestion">A suggestion</label></div>
+      </div>
+      <label class="field-label" for="feedback-message">Your feedback</label>
+      <textarea class="field" id="feedback-message" placeholder="Sample text only — not submitted"></textarea>
+      <p class="tiny muted">Submission is optional. This prototype does not send or store feedback.</p>
+    </div>
+    <a class="button" href="#feedback-confirmation">Preview confirmation →</a>
+  </section>
+
+  <section class="screen" id="feedback-confirmation" aria-labelledby="confirmation-title">
+    <a class="back" href="#feedback">← Back to feedback</a>
+    <p class="eyebrow">Feedback · Preview state</p>
+    <div class="hero"><span class="badge">Prototype only</span><h1 id="confirmation-title">Thanks for sharing.</h1><p>This is a sample confirmation. Nothing has been submitted or saved.</p></div>
+    <div class="card"><h3>Optional feedback</h3><p>Feedback handling and response workflows are not defined by this preview.</p></div>
+    <a class="button" href="#home">Back to Home →</a>
+  </section>
+
+  <section class="screen" id="help" aria-labelledby="help-title">
+    <a class="back" href="#profile">← Profile</a>
+    <p class="eyebrow">Help and support</p><h1 id="help-title">A focused study experience.</h1>
+    <div class="card">
+      <h3>Program and content</h3><p class="small">Learning features depend on supported active programs and approved content availability.</p>
+      <div class="divider"></div>
+      <h3>Study language</h3><p class="small">App Language and Exam/Study Language are separate preferences. Content availability may vary.</p>
+      <div class="divider"></div>
+      <h3>Need to share feedback?</h3><p class="small">Open the dedicated optional feedback area from your Profile.</p>
+      <a class="button secondary" href="#feedback">Open feedback →</a>
+    </div>
+  </section>
+
+</div>
+</main>
+</body>
+</html>
