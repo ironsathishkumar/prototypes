@@ -10,7 +10,7 @@ Open `index.html` in a modern browser; nothing to install. Best viewed as a phon
 - Initial assessment, sample learning profile, starter plan, and active-program dashboard
 - Practice topic selection, all four difficulty modes, question, immediate feedback, and explanation
 - Mistake book and revision queue
-- Mock hub with a focused subject/topic mock flow and a separate full mock instructions, question, result, and analysis flow
+- Mock hub with focused subject/topic mock and separate full mock instructions, question, result, and analysis
 - AI Coach sample conversation and grounding guidance
 - Settings, language preference changes, active-program switching, and dedicated optional student feedback area
 
