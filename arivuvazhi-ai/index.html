@@ -3,45 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f6f2">
+  <meta name="theme-color" content="#f6f5f1">
   <title>ArivuVazhi — Student App Preview</title>
   <style>
     :root {
       color-scheme: light;
-      --page: #f4f6f2;
-      --surface: #ffffff;
-      --surface-2: #edf2ed;
-      --text: #1e2b25;
-      --muted: #68776f;
-      --line: #e0e7e0;
-      --brand: #176b53;
-      --brand-strong: #10563f;
-      --brand-soft: #e5f3eb;
-      --gold: #e5ad4f;
-      --gold-soft: #fff3dc;
-      --red: #b64f48;
-      --red-soft: #fff0ed;
-      --shadow: 0 14px 36px rgba(28, 51, 40, .08);
-      --radius: 21px;
+      --page: #f6f5f1;
+      --surface: #fffefa;
+      --surface-2: #f0efe9;
+      --text: #202438;
+      --muted: #6f7180;
+      --line: #e6e4dc;
+      --brand: #31336f;
+      --brand-strong: #252755;
+      --brand-soft: #ededf8;
+      --gold: #e4a83b;
+      --gold-soft: #fff3d9;
+      --red: #b74e51;
+      --red-soft: #fff0ef;
+      --green: #29725d;
+      --green-soft: #e8f4ee;
+      --shadow: 0 12px 32px rgba(35, 37, 65, .07);
+      --radius: 20px;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         color-scheme: dark;
-        --page: #101815;
-        --surface: #19231e;
-        --surface-2: #22302a;
-        --text: #edf4ef;
-        --muted: #a5b4aa;
-        --line: #34443b;
-        --brand: #79cba8;
-        --brand-strong: #98dfbc;
-        --brand-soft: #20392e;
-        --gold: #e6b45b;
-        --gold-soft: #3b3020;
-        --red: #ef9389;
-        --red-soft: #3c2624;
-        --shadow: 0 14px 36px rgba(0, 0, 0, .28);
+        --page: #11121a;
+        --surface: #1b1c27;
+        --surface-2: #262735;
+        --text: #f2f1f8;
+        --muted: #b0afbd;
+        --line: #373846;
+        --brand: #aaaaf0;
+        --brand-strong: #c4c4ff;
+        --brand-soft: #2b2b46;
+        --gold: #f0bd63;
+        --gold-soft: #393020;
+        --red: #f0999b;
+        --red-soft: #402629;
+        --green: #8dd1b2;
+        --green-soft: #20372f;
+        --shadow: 0 12px 32px rgba(0, 0, 0, .24);
       }
     }
 
@@ -53,9 +57,7 @@
       display: grid;
       place-items: center;
       padding: 24px 12px;
-      background:
-        radial-gradient(ellipse at 20% 0%, var(--brand-soft), transparent 34rem),
-        var(--page);
+      background: radial-gradient(ellipse at 18% 0%, var(--brand-soft), transparent 35rem), var(--page);
       color: var(--text);
       font: 15px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -69,7 +71,7 @@
       border: 1px solid var(--line);
       border-radius: 38px;
       background: var(--surface);
-      box-shadow: 0 28px 80px rgba(25, 46, 35, .18);
+      box-shadow: 0 28px 80px rgba(25, 27, 48, .2);
     }
     .device::before {
       content: "";
@@ -82,7 +84,7 @@
       transform: translateX(-50%);
       border-radius: 99px;
       background: var(--text);
-      opacity: .9;
+      opacity: .88;
       pointer-events: none;
     }
     .screens { height: 100%; }
@@ -91,20 +93,14 @@
       height: 100%;
       overflow-y: auto;
       overscroll-behavior: contain;
-      padding: 40px 20px 32px;
+      padding: 42px 20px 28px;
       scrollbar-width: thin;
       scrollbar-color: var(--line) transparent;
     }
     .screen:target { display: block; }
     .screens:not(:has(.screen:target)) #welcome { display: block; }
-
-    .app-header, .row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .app-header { margin: 0 0 23px; }
+    .app-header, .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .app-header { margin: 0 0 22px; }
     .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.03em; }
     .brand-mark {
       display: grid;
@@ -117,16 +113,11 @@
       font-size: 20px;
     }
     .brand-name { font-size: 16px; }
-    .brand-name small {
-      display: block;
-      color: var(--muted);
-      font-size: 9px;
-      letter-spacing: .1em;
-    }
+    .brand-name small { display: block; color: var(--muted); font-size: 9px; letter-spacing: .1em; }
     .avatar {
       display: grid;
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       place-items: center;
       border-radius: 50%;
       background: var(--gold-soft);
@@ -137,40 +128,35 @@
       color: var(--brand);
       font-size: 11px;
       font-weight: 800;
-      letter-spacing: .11em;
+      letter-spacing: .1em;
       text-transform: uppercase;
     }
     h1, h2, h3, p { margin-top: 0; }
-    h1 {
-      margin-bottom: 10px;
-      font-size: clamp(29px, 8vw, 37px);
-      line-height: 1.08;
-      letter-spacing: -.045em;
-    }
+    h1 { margin-bottom: 10px; font-size: clamp(29px, 8vw, 36px); line-height: 1.08; letter-spacing: -.045em; }
     h2 { margin-bottom: 8px; font-size: 22px; line-height: 1.2; letter-spacing: -.03em; }
     h3 { margin-bottom: 6px; font-size: 15px; }
     p { color: var(--muted); }
     .lead { margin-bottom: 20px; font-size: 15px; }
     .card {
       margin: 13px 0;
-      padding: 18px;
+      padding: 17px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: var(--surface);
       box-shadow: var(--shadow);
     }
-    .compact { padding: 15px; }
+    .compact { padding: 14px; }
     .hero {
       margin: 0 0 15px;
       padding: 23px 20px;
       border-radius: 25px;
       background: var(--brand);
-      color: white;
+      color: #fff;
       box-shadow: var(--shadow);
     }
     .hero h2 { font-size: 27px; }
     .hero p { color: rgba(255,255,255,.82); }
-    .hero .eyebrow { color: #c3f2da; }
+    .hero .eyebrow { color: #eee8bc; }
     .badge {
       display: inline-flex;
       align-items: center;
@@ -184,7 +170,7 @@
       line-height: 1.35;
     }
     .badge.amber { background: var(--gold-soft); color: var(--text); }
-    .badge.red { background: var(--red-soft); color: var(--red); }
+    .badge.green { background: var(--green-soft); color: var(--green); }
     .button {
       display: flex;
       min-height: 50px;
@@ -203,12 +189,12 @@
     .button.secondary { background: var(--brand-soft); color: var(--brand); }
     .button.ghost { background: transparent; color: var(--brand); }
     .button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
-    .stack { display: grid; gap: 9px; }
+    .stack { display: grid; gap: 8px; }
     .back {
       display: inline-flex;
       min-height: 44px;
       align-items: center;
-      margin: -5px 0 10px;
+      margin: -6px 0 10px;
       color: var(--muted);
       font-size: 13px;
       font-weight: 750;
@@ -253,21 +239,11 @@
     .list-copy { flex: 1; min-width: 0; }
     .list-copy strong { display: block; font-size: 13px; }
     .list-copy span { display: block; color: var(--muted); font-size: 11px; }
-    .topic-line {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 7px;
-      margin: 14px 0;
-    }
+    .topic-line { display: grid; grid-template-columns: 1fr auto; gap: 7px; margin: 14px 0; }
     .topic-line .progress-track { grid-column: 1 / -1; }
     .choice-list { display: grid; gap: 8px; margin: 13px 0; }
     .choice { position: relative; }
-    .choice input {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      opacity: 0;
-    }
+    .choice input { position: absolute; width: 1px; height: 1px; opacity: 0; }
     .choice label {
       display: flex;
       min-height: 48px;
@@ -319,13 +295,7 @@
     }
     .bottom-nav a span { font-size: 16px; line-height: 1.2; }
     .bottom-nav a:hover { background: var(--brand-soft); color: var(--brand); }
-    details {
-      margin: 10px 0;
-      padding: 12px 14px;
-      border: 1px solid var(--line);
-      border-radius: 13px;
-      background: var(--surface);
-    }
+    details { margin: 10px 0; padding: 12px 14px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); }
     summary { min-height: 24px; cursor: pointer; font-size: 13px; font-weight: 750; }
     .field-label { display: block; margin: 12px 0 5px; font-size: 12px; font-weight: 750; }
     .field {
@@ -342,24 +312,14 @@
 
     @media (max-width: 460px) {
       body { display: block; padding: 0; }
-      .device {
-        width: 100%;
-        height: 100vh;
-        height: 100dvh;
-        min-height: 560px;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-      }
+      .device { width: 100%; height: 100vh; height: 100dvh; min-height: 560px; border: 0; border-radius: 0; box-shadow: none; }
       .device::before { top: 7px; }
-      .screen { padding-top: 34px; }
+      .screen { padding-top: 35px; }
     }
     @media (min-width: 461px) {
       .screen { padding-right: 24px; padding-left: 24px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   </style>
 </head>
 <body>
@@ -383,7 +343,7 @@
             <a class="button" href="#login">Sign in / create account →</a>
             <a class="button secondary" href="#home">Explore sample student home</a>
           </div>
-          <p class="tiny muted" style="margin:14px 0 0">Clickable preview · Sample content · Nothing is connected or saved</p>
+          <p class="tiny muted">Clickable preview · Sample content · Nothing is connected or saved</p>
         </div>
         <div class="stat-grid">
           <div class="stat"><strong>01</strong><span>Know your baseline</span></div>
@@ -402,7 +362,7 @@
           <input class="field" id="sample-email" type="text" placeholder="Example only">
           <label class="field-label" for="sample-password">Password</label>
           <input class="field" id="sample-password" type="password" placeholder="Not submitted">
-          <p class="tiny muted" style="margin-top:10px">Do not enter real personal information. Fields are illustrative and are not saved.</p>
+          <p class="tiny muted">Do not enter real personal information. Fields are illustrative and are not saved.</p>
           <div class="callout"><p>AI Coach access is intended for authenticated learners. The Coach in this prototype is a static sample, not a live service.</p></div>
         </div>
         <a class="button" href="#language-setup">Continue to language preferences →</a>
@@ -456,10 +416,10 @@
         <a class="back" href="#exam-setup">← Back to setup</a>
         <p class="eyebrow">Active program · Sample assessment</p>
         <div class="row"><h1 id="assessment-title">Let’s find your baseline.</h1><span class="badge">1 of 5</span></div>
-        <div class="progress-track"><span style="width:20%"></span></div>
+        <div class="progress-track"><span></span></div>
         <div class="card">
           <span class="badge amber">Demo question</span>
-          <h2 style="margin-top:14px">What number comes next?</h2>
+          <h2>What number comes next?</h2>
           <p class="lead">2, 4, 8, 16, ___</p>
           <div class="choice-list">
             <div class="choice"><input type="radio" name="baseline" id="base-a"><label for="base-a"><span class="answer-letter">A</span>24</label></div>
@@ -479,7 +439,7 @@
         <p class="lead">A starting snapshot—not a prediction of exam success.</p>
         <div class="hero">
           <span class="badge">Illustrative assessment result</span>
-          <h2 style="margin-top:14px">A steady place to begin</h2>
+          <h2>A steady place to begin</h2>
           <p>Build familiarity through practice and review your progress over time.</p>
         </div>
         <div class="card">
@@ -520,7 +480,7 @@
         </div>
         <div class="hero">
           <div class="row"><span class="badge">Your preparation</span><strong>18%</strong></div>
-          <div class="progress-track" style="margin:14px 0;background:rgba(255,255,255,.25)"><span style="width:18%;background:#fff"></span></div>
+          <div class="progress-track"><span style="width:18%"></span></div>
           <p>Sample progress for this active-program view.</p>
         </div>
         <div class="stat-grid">
@@ -530,7 +490,7 @@
         <div class="card">
           <div class="row"><h3>Today’s plan</h3><a class="badge" href="#plan">View plan</a></div>
           <div class="list-row"><span class="icon-tile">✍️</span><div class="list-copy"><strong>Reasoning practice</strong><span>Sample set · about 25 min</span></div><a href="#practice-setup">Start →</a></div>
-          <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Revision due</strong><span>Sample items</span></div><a href="#revision">→</a></div>
+          <div class="list-row"><span class="icon-tile">🔁</span><div class="list-copy"><strong>Revision due</strong><span>Sample items</span></div><a href="#revision">Open →</a></div>
         </div>
         <div class="card compact">
           <p class="eyebrow">Your next action</p>
@@ -538,11 +498,7 @@
           <a class="button" href="#practice-setup">Choose difficulty →</a>
         </div>
         <nav class="bottom-nav" aria-label="Main navigation">
-          <a href="#home"><span>⌂</span>Home</a>
-          <a href="#practice-setup"><span>✎</span>Practice</a>
-          <a href="#mock-hub"><span>▤</span>Mock</a>
-          <a href="#coach"><span>✦</span>Coach</a>
-          <a href="#feedback"><span>♡</span>Feedback</a>
+          <a href="#home"><span>⌂</span>Home</a><a href="#practice-setup"><span>✎</span>Practice</a><a href="#mock-hub"><span>▤</span>Mock</a><a href="#coach"><span>✦</span>Coach</a><a href="#feedback"><span>♡</span>Feedback</a>
         </nav>
       </section>
 
@@ -581,7 +537,7 @@
         <div class="progress-track"><span style="width:10%"></span></div>
         <div class="card">
           <span class="badge amber">Demo question</span>
-          <h2 style="margin-top:14px">What number completes the pattern?</h2>
+          <h2>What number completes the pattern?</h2>
           <p class="lead">3, 6, 12, 24, ___</p>
           <div class="choice-list">
             <div class="choice"><input type="radio" name="practice-answer" id="prac-a"><label for="prac-a"><span class="answer-letter">A</span>36</label></div>
@@ -599,8 +555,8 @@
         <a class="back" href="#practice">← Back to question</a>
         <p class="eyebrow">Immediate feedback · Demo answer</p>
         <div class="hero">
-          <span class="badge">Correct answer: C · 48</span>
-          <h2 id="practice-result-title" style="margin-top:14px">Good work—spot the pattern.</h2>
+          <span class="badge green">Correct answer: C · 48</span>
+          <h2 id="practice-result-title">Good work—spot the pattern.</h2>
           <p>Each number is multiplied by 2 to get the next number.</p>
         </div>
         <div class="card">
@@ -619,7 +575,7 @@
         <h1 id="mistakes-title">Turn mistakes into progress.</h1>
         <p class="lead">Revisit saved questions and the ideas behind their answers.</p>
         <div class="card">
-          <div class="row"><h3>Saved for review</h3><span class="badge red">Sample items</span></div>
+          <div class="row"><h3>Saved for review</h3><span class="badge">Sample items</span></div>
           <div class="list-row"><span class="icon-tile">↗</span><div class="list-copy"><strong>Number patterns</strong><span>Saved today · Repeat practice</span></div><a href="#revision">→</a></div>
           <div class="list-row"><span class="icon-tile">📖</span><div class="list-copy"><strong>Reading comprehension</strong><span>Saved yesterday · Review explanation</span></div><a href="#revision">→</a></div>
           <div class="list-row"><span class="icon-tile">🧭</span><div class="list-copy"><strong>General awareness</strong><span>Saved earlier · Revisit concept</span></div><a href="#revision">→</a></div>
@@ -657,13 +613,13 @@
         <p class="lead">A focused short mock and a full exam-style mock serve different practice goals.</p>
         <div class="card">
           <span class="badge">Focused practice</span>
-          <h2 style="margin-top:12px">Subject or topic mock</h2>
+          <h2>Subject or topic mock</h2>
           <p>Practice a selected subject or topic in your active program. This is not a full-exam simulation.</p>
           <a class="button secondary" href="#short-mock-setup">Set up focused mock →</a>
         </div>
         <div class="card">
           <span class="badge amber">Full exam simulation</span>
-          <h2 style="margin-top:12px">Full mock exam</h2>
+          <h2>Full mock exam</h2>
           <p>Follows the active program’s configured rules, including timing, marks, question pattern, scoring, and applicable negative marking.</p>
           <a class="button" href="#full-mock-intro">View full mock instructions →</a>
         </div>
@@ -701,7 +657,7 @@
         <div class="progress-track"><span style="width:35%"></span></div>
         <div class="card">
           <span class="badge">Number patterns · Demo</span>
-          <h2 style="margin-top:13px">Which number continues the sequence?</h2>
+          <h2>Which number continues the sequence?</h2>
           <p class="lead">5, 10, 20, 40, ___</p>
           <div class="choice-list">
             <div class="choice"><input type="radio" name="short-answer" id="short-a"><label for="short-a"><span class="answer-letter">A</span>60</label></div>
@@ -720,7 +676,7 @@
         <h1 id="short-results-title">Your topic snapshot.</h1>
         <div class="hero">
           <span class="badge">Illustrative result</span>
-          <h2 style="font-size:38px;margin:14px 0 4px">4 / 5</h2>
+          <h2>4 / 5</h2>
           <p>Sample topic practice result—not an exam outcome prediction.</p>
         </div>
         <div class="card">
@@ -755,7 +711,7 @@
         <div class="progress-track"><span style="width:12%"></span></div>
         <div class="card">
           <div class="row"><span class="badge">Sample section</span><span class="small muted">1 / sample set</span></div>
-          <h2 style="margin-top:14px">A book costs ₹80 after a 20% discount. What was its original price?</h2>
+          <h2>A book costs ₹80 after a 20% discount. What was its original price?</h2>
           <div class="choice-list">
             <div class="choice"><input type="radio" name="full-answer" id="full-a"><label for="full-a"><span class="answer-letter">A</span>₹96</label></div>
             <div class="choice"><input type="radio" name="full-answer" id="full-b"><label for="full-b"><span class="answer-letter">B</span>₹100</label></div>
@@ -776,7 +732,7 @@
         <h1 id="mock-results-title">Here’s what this example shows.</h1>
         <div class="hero">
           <span class="badge">Illustrative result</span>
-          <h2 style="font-size:40px;margin:14px 0 4px">7 / 10</h2>
+          <h2>7 / 10</h2>
           <p>A practice snapshot—not a prediction of exam success.</p>
         </div>
         <div class="stat-grid">
@@ -800,7 +756,7 @@
         <h1 id="analysis-title">Choose your next move.</h1>
         <div class="card">
           <span class="badge">Example analysis</span>
-          <h2 style="margin-top:13px">Build accuracy in quantitative basics.</h2>
+          <h2>Build accuracy in quantitative basics.</h2>
           <p>This sample shows stronger reasoning results. Reviewing percentage questions may be a useful next practice step.</p>
           <div class="callout"><p>Exam-engine code calculates scores and deterministic metrics. AI may explain results, but must not replace calculations or promise success.</p></div>
         </div>
@@ -819,11 +775,11 @@
         <p class="lead">A preview of help understanding a practice answer or planning study.</p>
         <div class="card">
           <div class="row"><span class="badge">Static sample conversation</span><span class="tiny muted">No live AI</span></div>
-          <div class="callout" style="margin-top:15px"><p><strong>You</strong><br>Why is the answer to the pattern question 48?</p></div>
+          <div class="callout"><p><strong>You</strong><br>Why is the answer to the pattern question 48?</p></div>
           <div class="card compact">
             <span class="badge">Coach response · Demo</span>
-            <p style="margin:10px 0 0;color:var(--text)">The pattern doubles each time: 3 becomes 6, 6 becomes 12, and 12 becomes 24. Doubling 24 gives <strong>48</strong>.</p>
-            <p class="tiny muted" style="margin:10px 0 0">Sample explanation, not a retrieved official source.</p>
+            <p>The pattern doubles each time: 3 becomes 6, 6 becomes 12, and 12 becomes 24. Doubling 24 gives <strong>48</strong>.</p>
+            <p class="tiny muted">Sample explanation, not a retrieved official source.</p>
           </div>
         </div>
         <div class="card">
@@ -856,7 +812,7 @@
           </div>
           <label class="field-label" for="feedback-message">Your feedback</label>
           <textarea class="field" id="feedback-message" placeholder="Write a sample note…"></textarea>
-          <p class="tiny muted" style="margin-top:10px">Optional. This prototype does not submit, store, or send feedback.</p>
+          <p class="tiny muted">Optional. This prototype does not submit, store, or send feedback.</p>
         </div>
         <a class="button" href="#feedback-confirmation">Preview submission confirmation →</a>
         <nav class="bottom-nav" aria-label="Main navigation">
@@ -869,7 +825,7 @@
         <p class="eyebrow">Feedback · Preview state</p>
         <div class="hero">
           <span class="badge">Prototype only</span>
-          <h1 id="feedback-confirm-title" style="margin-top:14px">Thanks for sharing.</h1>
+          <h1 id="feedback-confirm-title">Thanks for sharing.</h1>
           <p>This is a sample confirmation screen. No feedback has been sent or saved.</p>
         </div>
         <div class="card">
